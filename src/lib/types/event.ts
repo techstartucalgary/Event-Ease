@@ -7,8 +7,6 @@ export type NewEvent = {
     creatorType: EntityType
 }
 
-export type EventUpdateType = {
-
-};
+export type EventUpdateType = object;
 
 export type EventSchemaType = BaseModel & NewEvent;
