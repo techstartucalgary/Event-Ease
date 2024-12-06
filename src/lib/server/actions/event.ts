@@ -1,12 +1,14 @@
 'use server'
 
+import { processError } from "@/lib/helpers";
 import { updateEvent } from "@/lib/server/helpers/event";
+import { EventUpdateType } from "@/lib/types/event";
 
-export async function updateEventAction(id: string, data: any) {
+export async function updateEventAction(id: string, data: EventUpdateType) {
     try {
         await updateEvent(id, data);
-    } catch (error: any) {
+    } catch (error) {
         console.error(error);
-        throw new Error(error.message);
+        processError(error);
     }
 }

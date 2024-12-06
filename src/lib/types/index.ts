@@ -14,3 +14,7 @@ export type ModelTimestamp = keyof ModelTimestamps;
 export type BaseModel = BaseEntity & ModelTimestamps;
 
 export type EntityType = typeof entityTypes[number];
+
+export type Error = {
+    message: string
+}
