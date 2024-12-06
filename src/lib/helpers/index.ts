@@ -1,0 +1,1 @@
+export const entityTypes = ["User", "Organization"] as const;
