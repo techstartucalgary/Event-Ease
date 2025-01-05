@@ -1,5 +1,4 @@
-import { isValidEmail, parseToJSON, prefixWithCloudUrl, processError, getSearchRegex, logError } from "@/lib/helpers";
-import { InvalidEmailError } from "@/lib/helpers/exceptions";
+import { parseToJSON, prefixWithCloudUrl, processError, getSearchRegex, logError } from "@/lib/helpers";
 import { BulkUserDataToUpdate, IdAndOptionalPicture, NewUser, UserSchemaType } from "@/lib/types/user";
 import { User } from "@/lib/server/models";
 import { validatedNewUserData, validateUserUpdates } from "@/lib/server/models/user";
@@ -7,8 +6,6 @@ import { SortOrder, UpdateQuery } from "mongoose";
 
 export async function createUser(data: NewUser) {
     try {
-        if (!isValidEmail(data.email))
-            throw new InvalidEmailError();
         const user = await (await User).create(validatedNewUserData(data));
         return parseToJSON(user);
     } catch (error) {
@@ -116,14 +113,14 @@ export async function searchUsersPaginated(args: SearchUsersPaginatedArgs) {
         const { searchTerm, currentUserId, page, limit, sortParam, isUsernameSearch } = args;
         return (
             await (await User)
-            .find({
-                [isUsernameSearch ? "username" : "name"]: { $regex: getSearchRegex(searchTerm) },
-                _id: { $ne: currentUserId }
-            })
-            .lean()
-            .sort(sortParam)
-            .skip(page * limit)
-            .limit(limit)
+                .find({
+                    [isUsernameSearch ? "username" : "name"]: { $regex: getSearchRegex(searchTerm) },
+                    _id: { $ne: currentUserId }
+                })
+                .lean()
+                .sort(sortParam)
+                .skip(page * limit)
+                .limit(limit)
         ).map(sanitizeUserObject);
     } catch (error) {
         console.error("Error searching users", error);
