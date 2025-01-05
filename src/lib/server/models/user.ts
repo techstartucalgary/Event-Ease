@@ -62,7 +62,8 @@ export function validatedNewUserData(params: NewUser) {
     const schema = yup.object().shape({
         name: getStringSchema({ message: "Name is required" }),
         username: getStringSchema({ message: "Username is required" }),
-        email: getStringSchema({ message: "User email is required" }),
+        email: getStringSchema({ message: "User email is required" })
+            .email('Invalid email format'),
         clerkId: getStringSchema({ message: "User's clerk id is required" })
     });
 
