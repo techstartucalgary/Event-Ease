@@ -9,12 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.9.6",
+    "@hookform/resolvers": "^3.9.1",
     "mongodb": "^6.11.0",
     "mongoose": "^8.8.4",
     "next": "15.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sass": "^1.82.0"
+    "react-hook-form": "^7.54.2",
+    "sass": "^1.82.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@types/node": "^20",

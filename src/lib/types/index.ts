@@ -1,4 +1,4 @@
-import { entityTypes } from "../helpers";
+import { cloudFolders, entityTypes } from "../helpers";
 
 export type BaseEntity = {
     _id: string
@@ -17,4 +17,10 @@ export type EntityType = typeof entityTypes[number];
 
 export type Error = {
     message: string
+}
+
+export type CloudFolder = typeof cloudFolders[number];
+
+export type RequestParam = {
+    params: Promise<{ id: string }>
 }
