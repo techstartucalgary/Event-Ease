@@ -3,9 +3,9 @@ import { EventSchemaType } from "@/lib/types/event";
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(req: Request) {
+export async function GET() {
     try {
-        const { searchParams } = new URL(req.url);
+        //const { searchParams } = new URL(req.url);
         //const searchTerm = searchParams.get('searchTerm') ?? "";
 
         //const page = searchParams.get('page') ? Number(searchParams.get('page')) : 0;
