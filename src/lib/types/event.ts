@@ -6,15 +6,16 @@ export type NewEvent = {
   creator: string;
   creatorType: EntityType;
   location: string;
-  participants: string[];
-  status: "Upcoming" | "Ongoing" | "Completed" | "Cancelled";
+  startDate: Date;
+  endDate: Date;
 };
 
 export type BulkEventDataToUpdate = {
   name?: string;
   description?: string;
   location?: string;
-  status?: "Upcoming" | "Ongoing" | "Completed" | "Cancelled";
+  startDate?: Date;
+  endDate?: Date;
 };
 
 export type EventSchemaType = BaseModel & NewEvent;

@@ -9,6 +9,8 @@ import { DATABASE_CONNECTION } from "@/lib/server/helpers/database";
 import * as yup from "yup";
 import { getStringSchema } from "@/lib/helpers";
 
+// ** Add participants model **
+
 const EventSchema = new Schema<EventSchemaType>(
   {
     name: {
@@ -33,21 +35,13 @@ const EventSchema = new Schema<EventSchemaType>(
       type: String,
       required: true,
     },
-    participants: {
-      type: [
-        {
-          type: String,
-          ref: "User",
-        },
-      ],
-      required: false,
-      default: [],
-    },
-    status: {
-      type: String,
-      enum: ["Upcoming", "Ongoing", "Completed", "Cancelled"],
+    startDate: {
+      type: Date,
       required: true,
-      default: "Upcoming",
+    },
+    endDate: {
+      type: Date,
+      required: true,
     },
   },
   { collection: "Events", timestamps: true, versionKey: false }
@@ -55,7 +49,15 @@ const EventSchema = new Schema<EventSchemaType>(
 
 export function validateNewEventData(params: NewEvent) {
   // Validate the provided params for creating a new event
-  const { name, description, creator, creatorType, location } = params;
+  const {
+    name,
+    description,
+    creator,
+    creatorType,
+    location,
+    startDate,
+    endDate,
+  } = params;
 
   const schema = yup.object().shape({
     name: getStringSchema({ message: "Event name is required" }),
@@ -66,6 +68,11 @@ export function validateNewEventData(params: NewEvent) {
       .oneOf(entityTypes, "Invalid creator type")
       .required("Creator type is required"),
     location: getStringSchema({ message: "Location is required" }),
+    startDate: yup.date().required("Start date is required"),
+    endDate: yup
+      .date()
+      .min(yup.ref("startDate"), "End date must be after start date")
+      .required("End date is required"),
   });
 
   return schema.validateSync({
@@ -74,6 +81,8 @@ export function validateNewEventData(params: NewEvent) {
     creator,
     creatorType,
     location,
+    startDate,
+    endDate,
   }) as NewEvent;
 }
 
@@ -83,12 +92,11 @@ export function validateEventUpdates(data: BulkEventDataToUpdate) {
     name: getStringSchema({ required: false }),
     description: getStringSchema({ required: false }),
     location: getStringSchema({ required: false }),
-    status: yup
-      .string()
-      .oneOf(
-        ["Upcoming", "Ongoing", "Completed", "Cancelled"],
-        "Invalid status"
-      ),
+    startDate: yup.date().optional(),
+    endDate: yup
+      .date()
+      .min(yup.ref("startDate"), "End date must be after start date")
+      .optional(),
   });
 
   return schema.validateSync(data, { stripUnknown: true });
