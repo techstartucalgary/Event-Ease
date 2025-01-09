@@ -29,7 +29,7 @@ export async function createEvent(data: NewEvent) {
 export async function updateEvent(
   eventId: string,
   newData: BulkEventDataToUpdate
-) {
+): Promise<EventSchemaType | null> {
   try {
     const validatedData = validateEventUpdates(newData);
 
@@ -43,11 +43,21 @@ export async function updateEvent(
 
     if (Object.keys(updates).length > 0) {
       updates.updatedAt = new Date();
-      await (await Event).findByIdAndUpdate(eventId, updates);
+      const updatedEvent = await (
+        await Event
+      ).findByIdAndUpdate(
+        eventId,
+        { $set: updates },
+        { new: true, lean: true }
+      );
+      return updatedEvent;
     }
+
+    return null;
   } catch (error) {
     console.error("Error updating event", error);
     processError(error);
+    return null;
   }
 }
 
