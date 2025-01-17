@@ -53,6 +53,16 @@ const UserSchema = new Schema<UserSchemaType>({
         required: true,
         default: []
     },
+    organizations: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Organization", // Referencing the Organization model
+            },
+        ],
+        required: false,
+        default: [],
+    },
 }, { collection: "Users", timestamps: true, versionKey: false })
 
 export function validatedNewUserData(params: NewUser) {
@@ -79,7 +89,8 @@ export function validateUserUpdates(data: BulkUserDataToUpdate) {
             .matches(nameRegex, 'Invalid name format'),
         intro: getStringSchema({ required: false }),
         phoneNumber: getStringSchema({ required: false }),
-        picture: getStringSchema({ required: false }).nullable()
+        picture: getStringSchema({required: false}).nullable(),
+        organizations: getStringSchema({required: false}),
     });
 
     return schema.validateSync(data, { stripUnknown: true });
