@@ -52,17 +52,7 @@ const UserSchema = new Schema<UserSchemaType>({
         }],
         required: true,
         default: []
-    },
-    organizations: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Organization", // Referencing the Organization model
-            },
-        ],
-        required: false,
-        default: [],
-    },
+    }
 }, { collection: "Users", timestamps: true, versionKey: false })
 
 export function validatedNewUserData(params: NewUser) {

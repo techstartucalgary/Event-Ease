@@ -1,27 +1,26 @@
-import {BaseEntity, BaseModel} from ".";
+import { BaseModel } from ".";
 
 type DefaultFields = {
-    name?: string,
-    description?: string,
-    picture?: string,
-    users?: string[],
+    pushTokens: string[]
 }
 
 export type NewOrganization = {
+    _id: string,
     name: string,
+    username: string,
+    email: string,
+    clerkId: string,
+    phoneNumber: string,
     description: string,
-    users?: string[]
+    picture: string,
+    stripeId: string
 }
 
 export type BulkOrganizationDataToUpdate = {
     name?: string,
     description?: string,
+    phoneNumber?: string,
     picture?: string,
-    users?: string[],
 }
 
 export type OrganizationSchemaType = BaseModel & NewOrganization & DefaultFields;
-
-export type OrganizationOptionalPicture = BaseEntity & {
-    picture?: string;
-}
