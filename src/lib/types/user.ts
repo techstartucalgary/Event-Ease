@@ -29,3 +29,11 @@ export type BulkUserDataToUpdate = {
 export type IdAndOptionalPicture = BaseEntity & {
     picture?: string;
 }
+
+export type SessionUser = {
+    id: string,
+    email: string,
+    picture?: string,
+    fullName: string,
+    username: string
+}
