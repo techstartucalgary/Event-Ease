@@ -51,9 +51,9 @@ export default function ContentSection() {
                         <h3>Create Memorable Experiences</h3>
                     </div>
                     <p className="max-w-3xl mx-auto text-gray-700 text-base leading-relaxed">
-                        Easily create, manage, and share your events. Our intuitive platform streamlines event planning 
+                        {`Easily create, manage, and share your events. Our intuitive platform streamlines event planning 
                         so you can focus on what matters most – connecting with your audience. 
-                        Whether it's a small gathering or a large conference, our tools help you bring your vision to life effortlessly.
+                        Whether it's a small gathering or a large conference, our tools help you bring your vision to life effortlessly.`}
                     </p>
                 </div>
 
