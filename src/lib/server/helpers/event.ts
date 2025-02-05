@@ -14,7 +14,7 @@ import {
   validateNewEventData,
   validateEventUpdates,
 } from "@/lib/server/models/event";
-import { SortOrder, UpdateQuery } from "mongoose";
+import { SortOrder, UpdateQuery, FilterQuery } from "mongoose";
 
 export async function createEvent(data: NewEvent) {
   try {
@@ -89,97 +89,6 @@ export async function getEventById(
   }
 }
 
-export async function getAllEvents() {
-  try {
-    return (await (await Event).find().lean()).map(sanitizeEventObject);
-  } catch (error) {
-    console.error("Error fetching all events", error);
-    processError(error);
-  }
-}
-
-export async function getEventsByDateRange(
-  startDate: Date,
-  endDate: Date
-): Promise<EventSchemaType[]> {
-  try {
-    const events = await (
-      await Event
-    )
-      .find({
-        startDate: { $gte: startDate },
-        endDate: { $lte: endDate },
-      })
-      .lean();
-    return events.map(sanitizeEventObject);
-  } catch (error) {
-    logError("Error fetching events by date range", error);
-    return [];
-  }
-}
-
-export async function getEventsByCreator(
-  creatorId: string
-): Promise<EventSchemaType[]> {
-  try {
-    const events = await (await Event).find({ creator: creatorId }).lean();
-    return events.map(sanitizeEventObject);
-  } catch (error) {
-    logError("Error fetching events by creator", error);
-    return [];
-  }
-}
-
-export async function fetchEvents(
-  eventIds: string[]
-): Promise<EventSchemaType[]> {
-  try {
-    return (
-      await (
-        await Event
-      )
-        .find({ _id: { $in: eventIds } })
-        .sort({ startDate: "ascending" })
-        .lean()
-    ).map(sanitizeEventObject);
-  } catch (error) {
-    console.error("Error fetching events", error);
-    processError(error);
-    return [];
-  }
-}
-
-type SearchEventsPaginatedArgs = {
-  searchTerm: string;
-  page: number;
-  limit: number;
-  sortParam?: { [key: string]: SortOrder };
-};
-
-export async function searchEventsPaginated({
-  searchTerm,
-  page,
-  limit,
-  sortParam = { startDate: "ascending" },
-}: SearchEventsPaginatedArgs): Promise<EventSchemaType[]> {
-  try {
-    const events = await (
-      await Event
-    )
-      .find({ name: { $regex: getSearchRegex(searchTerm) } })
-      .sort(sortParam)
-      .skip(page * limit)
-      .limit(limit)
-      .lean();
-
-    return events.map(sanitizeEventObject);
-  } catch (error) {
-    console.error("Error searching events", error);
-    processError(error);
-    return [];
-  }
-}
-
 export async function deleteEventById(eventId: string): Promise<boolean> {
   try {
     const result = await (await Event).findByIdAndDelete(eventId);
@@ -189,3 +98,122 @@ export async function deleteEventById(eventId: string): Promise<boolean> {
     return false;
   }
 }
+
+type FetchFilteredEventsArgs = {
+  searchTerm?: string;
+  creatorId?: string;
+  startDate?: Date;
+  endDate?: Date;
+  page?: number;
+  limit: number;
+  sortParam?: { [key: string]: SortOrder };
+};
+
+export async function fetchFilteredEvents({
+  searchTerm,
+  creatorId,
+  startDate,
+  endDate,
+  page = 0, // Default page number if not provided
+  limit,
+  sortParam = { startDate: "ascending" },
+}: FetchFilteredEventsArgs): Promise<EventSchemaType[]> {
+  try {
+    const query: FilterQuery<EventSchemaType> = {};
+
+    if (searchTerm) {
+      query.name = { $regex: getSearchRegex(searchTerm) };
+    }
+
+    if (creatorId) {
+      query.creator = creatorId;
+    }
+
+    if (startDate && endDate) {
+      query.startDate = { $gte: startDate };
+      query.endDate = { $lte: endDate };
+    } else if (startDate) {
+      query.startDate = { $gte: startDate };
+    } else if (endDate) {
+      query.endDate = { $lte: endDate };
+    }
+
+    const events = await (
+      await Event
+    )
+      .find(query)
+      .sort(sortParam)
+      .skip(page * limit)
+      .limit(limit)
+      .lean();
+
+    return events.map(sanitizeEventObject);
+  } catch (error) {
+    logError("Error fetching filtered events", error);
+    processError(error);
+    return [];
+  }
+}
+
+// export async function getEventsByDateRange(
+//   startDate: Date,
+//   endDate: Date
+// ): Promise<EventSchemaType[]> {
+//   try {
+//     const events = await (
+//       await Event
+//     )
+//       .find({
+//         startDate: { $gte: startDate },
+//         endDate: { $lte: endDate },
+//       })
+//       .lean();
+//     return events.map(sanitizeEventObject);
+//   } catch (error) {
+//     logError("Error fetching events by date range", error);
+//     return [];
+//   }
+// }
+
+// export async function getEventsByCreator(
+//   creatorId: string
+// ): Promise<EventSchemaType[]> {
+//   try {
+//     const events = await (await Event).find({ creator: creatorId }).lean();
+//     return events.map(sanitizeEventObject);
+//   } catch (error) {
+//     logError("Error fetching events by creator", error);
+//     return [];
+//   }
+// }
+
+// type SearchEventsPaginatedArgs = {
+//   searchTerm: string;
+//   page: number;
+//   limit: number;
+//   sortParam?: { [key: string]: SortOrder };
+// };
+
+// export async function searchEventsPaginated({
+//   searchTerm,
+//   page,
+//   limit,
+//   sortParam = { startDate: "ascending" },
+// }: SearchEventsPaginatedArgs): Promise<EventSchemaType[]> {
+//   try {
+//     const events = await (
+//       await Event
+//     )
+//       .find({ name: { $regex: getSearchRegex(searchTerm) } })
+//       .sort(sortParam)
+//       .skip(page * limit)
+//       .limit(limit)
+//       .lean();
+
+//     return events.map(sanitizeEventObject);
+//   } catch (error) {
+//     console.error("Error searching events", error);
+//     processError(error);
+//     return [];
+//   }
+// }
