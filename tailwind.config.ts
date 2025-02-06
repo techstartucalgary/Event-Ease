@@ -13,6 +13,7 @@ export default {
                 foreground: "var(--foreground)",
                 surface: "var(--surface)",
                 accent: "var(--accent)",
+                tertiary: "var(--tertiary)",
             },
         },
     },
