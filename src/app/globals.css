@@ -8,12 +8,14 @@
     --surface: #29353c;
     --accent: #ffffff;
     --tertiary: #768a96;
+    --font-outfit: "Outfit", sans-serif;
 }
 
 body {
     color: var(--foreground);
     background: var(--background);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-outfit);
+    overscroll-behavior: none;
 }
 
 /* Input Styles */
@@ -106,15 +108,7 @@ body {
 }
 
 .gradient-bg {
-    background: linear-gradient(
-        120deg,
-        #101e2e,
-        #44576d,
-        #768a96,
-        #aac7d8,
-        #44576d,
-        #101e2e
-    );
+    background: linear-gradient(120deg, #101e2e, #44576d, #44576d, #101e2e);
     background-size: 300% 300%;
     animation: gradient-move 12s ease infinite;
 }
