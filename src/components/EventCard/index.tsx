@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function EventCard({ image, name, description, tags, link }: { 
     image: string; 
@@ -18,7 +19,9 @@ export default function EventCard({ image, name, description, tags, link }: {
             <Link href={link} passHref>
                 <div className="cursor-pointer">
                     {/* Event Image */}
-                    <img src={image} alt={name} className="w-full h-48 object-cover" />
+                    <div className="relative w-full h-48">
+                        <Image src={image} alt={name} fill className="object-cover w-full h-full" />
+                    </div>
 
                     {/* Event Details */}
                     <div className="p-4 text-[#523D35]">
