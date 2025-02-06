@@ -6,39 +6,40 @@ export default function ContentSection() {
             {/* Top Events Section */}
             <div className="topEvents container mx-auto">
                 {/* Align TOP EVENTS with the first card */}
-                <h2 className="text-2xl text-left mb-6 pt-6 w-full">TOP EVENTS</h2>
+                <h2 className="text-2xl text-left mb-6 pt-6 w-full">
+                    TOP EVENTS
+                </h2>
 
                 {/* Responsive Grid Layout - filled with dummy data temporarily*/}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <EventCard 
+                    <EventCard
                         image="/images/tech.jpg"
                         name="Tech Conference 2025"
                         description="Join industry leaders discussing the future of AI and technology."
                         tags={["Technology", "AI", "Networking"]}
                         link="/events/eventlink"
                     />
-                    <EventCard 
+                    <EventCard
                         image="/images/hackathon.png"
                         name="Global AI Hackathon 2025"
                         description="Compete in a 48-hour AI hackathon and build cutting-edge solutions with a team of innovators."
                         tags={["Hackathon", "AI", "Competition"]}
                         link="/events/eventlink"
                     />
-                    <EventCard 
+                    <EventCard
                         image="/images/startup.jpg"
                         name="Startup Pitch Night"
                         description="Pitch your startup idea to investors and network with entrepreneurs in the industry."
                         tags={["Startups", "Entrepreneurship", "Investment"]}
                         link="/events/eventlink"
                     />
-                    <EventCard 
+                    <EventCard
                         image="/images/networking.jpg"
                         name="Tech Networking Mixer"
                         description="Meet tech professionals, developers, and recruiters to expand your network in the industry."
                         tags={["Networking", "Career", "Tech"]}
                         link="/events/eventlink"
                     />
-                    
                 </div>
             </div>
 
@@ -64,15 +65,14 @@ export default function ContentSection() {
                         <h3>Be Part of the Experience</h3>
                     </div>
                     <p className="max-w-3xl mx-auto text-gray-700 text-base leading-relaxed">
-                        Discover events that matter to you. Whether it’s a conference, workshop, or social gathering, 
-                        joining an event has never been easier. 
-                        Stay updated on upcoming events, engage with organizers, and ensure you never miss out on meaningful experiences.
+                        Discover events that matter to you. Whether it’s a
+                        conference, workshop, or social gathering, joining an
+                        event has never been easier. Stay updated on upcoming
+                        events, engage with organizers, and ensure you never
+                        miss out on meaningful experiences.
                     </p>
                 </div>
             </div>
-
-
-
         </div>
-    )
+    );
 }
