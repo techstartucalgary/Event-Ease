@@ -7,6 +7,7 @@
     --foreground: #171717;
     --surface: #29353c;
     --accent: #ffffff;
+    --tertiary: #768a96;
 }
 
 body {
@@ -15,29 +16,105 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Input Styles */
+@layer components {
+    input[type="text"],
+    input[type="date"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="search"],
+    select,
+    textarea {
+        @apply w-full p-2 rounded-lg bg-surface/40 backdrop-blur-sm 
+               border border-accent/10 text-accent
+               focus:border-accent/30 focus:ring-1 focus:ring-accent/30
+               transition-all duration-200
+               placeholder:text-accent/50;
+    }
+
+    /* Date input calendar icon */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        @apply invert opacity-50 hover:opacity-75 transition-opacity duration-200 cursor-pointer;
+    }
+
+    input[type="checkbox"] {
+        @apply rounded border-accent/20 bg-surface/40 text-accent
+               focus:ring-2 focus:ring-accent/30 focus:ring-offset-0
+               transition-all duration-200
+               h-4 w-4;
+    }
+
+    /* Range Input Styles */
+    .range-input {
+        @apply absolute w-full h-1 pointer-events-auto appearance-none bg-transparent;
+    }
+
+    .range-input::-webkit-slider-thumb {
+        @apply appearance-none h-4 w-4 rounded-full bg-accent shadow-md 
+               cursor-pointer transition-all duration-200 
+               hover:scale-110 hover:shadow-lg
+               active:scale-95;
+        margin-top: -6px;
+    }
+
+    .range-input::-moz-range-thumb {
+        @apply h-4 w-4 rounded-full bg-accent shadow-md 
+               cursor-pointer border-none transition-all duration-200 
+               hover:scale-110 hover:shadow-lg
+               active:scale-95;
+    }
+
+    .range-input::-webkit-slider-runnable-track {
+        @apply h-1 rounded-full bg-transparent;
+    }
+
+    .range-input::-moz-range-track {
+        @apply h-1 rounded-full bg-transparent;
+    }
+
+    select {
+        @apply appearance-none bg-surface/40 cursor-pointer
+               pr-8 /* Space for custom arrow */
+               bg-[url('data:image/svg+xml;charset=US-ASCII,<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')] 
+               bg-no-repeat bg-right-1 bg-[length:20px];
+    }
+
+    label {
+        @apply block mb-1.5 text-sm font-medium text-accent/90;
+    }
+}
 
 @keyframes gradient-move {
-  0% {
-      background-position: 0% 50%;
-  }
-  25% {
-      background-position: 50% 25%;
-  }
-  50% {
-      background-position: 100% 50%;
-  }
-  75% {
-      background-position: 75% 75%;
-  }
-  100% {
-      background-position: 0% 50%;
-  }
+    0% {
+        background-position: 0% 50%;
+    }
+    25% {
+        background-position: 50% 25%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    75% {
+        background-position: 75% 75%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .gradient-bg {
-  background: linear-gradient(120deg, #101e2e, #44576D, #768A96, #AAC7D8, #44576D,#101e2e);
-  background-size: 300% 300%;
-  animation: gradient-move 12s ease infinite;
+    background: linear-gradient(
+        120deg,
+        #101e2e,
+        #44576d,
+        #768a96,
+        #aac7d8,
+        #44576d,
+        #101e2e
+    );
+    background-size: 300% 300%;
+    animation: gradient-move 12s ease infinite;
 }
-
-
