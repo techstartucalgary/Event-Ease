@@ -4,7 +4,7 @@ import EventCard from "@/components/EventCard"; // Ensure the path is correct
 
 export default function ExploreEvents() {
     const [searchTerm, setSearchTerm] = useState("");
-    const [events, setEvents] = useState([
+    const events = [
         {
             image: "/images/tech.jpg",
             name: "Tech Conference 2025",
@@ -33,7 +33,7 @@ export default function ExploreEvents() {
             tags: ["Networking", "Career", "Tech"],
             link: "/events/eventlink"
         }
-    ]);
+    ];
 
     // Filtered events based on search term
     const filteredEvents = events.filter(event =>
@@ -41,7 +41,7 @@ export default function ExploreEvents() {
         event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
     );
-    
+
     return (
         <div className="max-w-[85%] mx-auto py-6">
             {/* Title */}
