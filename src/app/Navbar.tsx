@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 async function RightSide() {
     const user = null; // fetch authenticated user
@@ -31,7 +32,10 @@ export default function Navbar() {
         <nav className="sticky top-0 z-50 w-full shadow-sm bg-surface text-accent">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
-                    <div className="text-accent font-medium transition-colors cursor-pointer select-none flex items-center gap-2">
+                    <Link
+                        href="/"
+                        className="text-accent font-medium transition-colors cursor-pointer select-none flex items-center gap-2"
+                    >
                         <Image
                             src="/logo.svg"
                             alt="EventEase Logo"
@@ -39,7 +43,7 @@ export default function Navbar() {
                             height={32}
                         />
                         EventEase
-                    </div>
+                    </Link>
                     <Suspense
                         fallback={
                             <div className="flex items-center gap-4">
