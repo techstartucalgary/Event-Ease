@@ -1,16 +1,18 @@
 "use client"
 
-import { AuthContextProvider } from "./authContext";
-import QueryContextProvider from "./queryContext";
 import { PropsWithChildren } from "react";
-
+import QueryContextProvider from "./queryContext";
+import { AppContextProvider } from "./appContext";
+import { AuthContextProvider } from "./authContext";
 
 export default function GlobalProvider({ children }: PropsWithChildren) {
     return (
         <QueryContextProvider>
-            <AuthContextProvider>
-                {children}
-            </AuthContextProvider>
+            <AppContextProvider>
+                <AuthContextProvider>
+                    {children}
+                </AuthContextProvider>
+            </AppContextProvider>
         </QueryContextProvider>
     )
 }

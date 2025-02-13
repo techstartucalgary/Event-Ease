@@ -37,3 +37,11 @@ export type SessionUser = {
     fullName: string,
     username: string
 }
+
+export type ClerkUser = {
+    id: string,
+    email: string,
+    picture?: string,
+    fullName: string,
+    username: string
+}
