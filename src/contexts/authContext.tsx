@@ -1,62 +1,39 @@
 "use client"
 
-//import { SessionUser } from "@/lib/types/user"
 import { createContext, PropsWithChildren } from "react"
-
-
-/* type SignInParams = {
-    email: string,
-    password: string,
-    onSuccess?: () => void,
-    onError?: (errorMessage: string) => void
-}
-
-type SignUpParams = SignInParams & {
-    username: string,
-    name: string
-}
-
-type VerifyEmailParams = {
-    code: string,
-    onSuccess?: () => void,
-    onError?: (errorMessage: string) => void
-}
-
-type AuthenticateArgs = {
-    onSuccess?: () => void,
-    onError?: (errorMessage: string) => void,
-} & ({
-    provider: 'google'
-} | ({
-    email: string,
-    password: string
-    provider: 'credentials'
-} & ({
-    mode: 'signup',
-    name: string,
-    username: string
-} | {
-    mode: 'login'
-})))
+import { ClerkProvider, useUser } from "@clerk/nextjs"
+import { prefixWithCloudUrl } from "@/lib/helpers";
+import { ClerkUser } from "@/lib/types/user";
 
 type authContext = {
-    modalIsOpen: boolean,
-    openSignup: () => void,
-    openLogin: () => void,
-    user: SessionUser | null,
-    signIn: (args: SignInParams) => Promise<void>,
-    signUp: (args: SignUpParams) => Promise<void>,
-    signOut: () => Promise<void>,
-    signInWithGoogle: () => Promise<void>,
-    resendVerificationCode: () => Promise<void>,
-    verifyEmail: (args: VerifyEmailParams) => Promise<void>
-} */
+    user: ClerkUser | null;
+}
+const AuthContext = createContext<authContext | null>(null)
 
-export const AuthContext = createContext<unknown | null>(null)
-export function AuthContextProvider({ children }: PropsWithChildren) {
+function Provider({ children }: PropsWithChildren) {
+    const { user: clerkUser } = useUser();
+
+    const user = clerkUser ? {
+        id: clerkUser.id,
+        email: clerkUser.emailAddresses[0].emailAddress,
+        picture: !!clerkUser.publicMetadata.picture ? prefixWithCloudUrl("Users", clerkUser.publicMetadata.picture as string) : undefined,
+        fullName: clerkUser.fullName!,
+        username: clerkUser.username!
+    } : null
+
     return (
-        <AuthContext.Provider value={{}}>
+        <AuthContext.Provider value={{ user }}>
             {children}
         </AuthContext.Provider>
+    )
+}
+
+export function AuthContextProvider({ children }: PropsWithChildren) {
+    return (
+        <ClerkProvider>
+            <Provider>
+                {children}
+            </Provider>
+        </ClerkProvider>
     )
 }
