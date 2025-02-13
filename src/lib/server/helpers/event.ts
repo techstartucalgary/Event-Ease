@@ -1,158 +1,177 @@
 import { Event } from "@/lib/server/models";
 import {
-  parseToJSON,
-  processError,
-  logError,
-  getSearchRegex,
+    parseToJSON,
+    processError,
+    logError
 } from "@/lib/helpers";
 import {
-  NewEvent,
-  BulkEventDataToUpdate,
-  EventSchemaType,
+    NewEvent,
+    BulkEventDataToUpdate,
+    EventSchemaType,
 } from "@/lib/types/event";
 import {
-  validateNewEventData,
-  validateEventUpdates,
+    validateNewEventData,
+    validateEventUpdates,
 } from "@/lib/server/models/event";
 import { SortOrder, UpdateQuery, FilterQuery } from "mongoose";
 
 export async function createEvent(data: NewEvent) {
-  try {
-    const event = await (await Event).create(validateNewEventData(data));
-    return parseToJSON(event);
-  } catch (error) {
-    console.error("Error creating event", error);
-    processError(error);
-  }
+    try {
+        const event = await (await Event).create(validateNewEventData(data));
+        return parseToJSON(event);
+    } catch (error) {
+        console.error("Error creating event", error);
+        processError(error);
+    }
 }
 
 export async function updateEvent(
-  eventId: string,
-  newData: BulkEventDataToUpdate
+    eventId: string,
+    newData: BulkEventDataToUpdate
 ): Promise<EventSchemaType | null> {
-  try {
-    const validatedData = validateEventUpdates(newData);
+    try {
+        const validatedData = validateEventUpdates(newData);
 
-    const updates = {} as UpdateQuery<EventSchemaType>;
+        const updates = {} as UpdateQuery<EventSchemaType>;
 
-    Object.entries(validatedData).forEach(([key, value]) => {
-      if (value !== undefined) {
-        updates[key] = value;
-      }
-    });
+        Object.entries(validatedData).forEach(([key, value]) => {
+            if (value !== undefined) {
+                updates[key] = value;
+            }
+        });
 
-    if (Object.keys(updates).length > 0) {
-      updates.updatedAt = new Date();
-      const updatedEvent = await (
-        await Event
-      ).findByIdAndUpdate(
-        eventId,
-        { $set: updates },
-        { new: true, lean: true }
-      );
-      return updatedEvent;
+        if (Object.keys(updates).length > 0) {
+            updates.updatedAt = new Date();
+            const updatedEvent = await (
+                await Event
+            ).findByIdAndUpdate(
+                eventId,
+                { $set: updates },
+                { new: true, lean: true }
+            );
+            return updatedEvent;
+        }
+
+        return null;
+    } catch (error) {
+        console.error("Error updating event", error);
+        processError(error);
+        return null;
     }
-
-    return null;
-  } catch (error) {
-    console.error("Error updating event", error);
-    processError(error);
-    return null;
-  }
 }
 
 function sanitizeEventObject<T extends EventSchemaType>(event: T): T {
-  const status =
-    event.startDate && event.endDate
-      ? new Date() < event.startDate
-        ? "Upcoming"
-        : new Date() > event.endDate
-        ? "Completed"
-        : "Ongoing"
-      : "Unknown";
+    const status =
+        event.startDate && event.endDate
+            ? new Date() < event.startDate
+                ? "Upcoming"
+                : new Date() > event.endDate
+                    ? "Completed"
+                    : "Ongoing"
+            : "Unknown";
 
-  return {
-    ...parseToJSON(event),
-    status,
-  };
+    return {
+        ...parseToJSON(event),
+        status,
+    };
 }
 
 export async function getEventById(
-  eventId: string
+    eventId: string
 ): Promise<EventSchemaType | null> {
-  try {
-    const event = await (await Event).findById(eventId).lean();
-    return event ? sanitizeEventObject(event) : null;
-  } catch (error) {
-    logError("Error getting event by ID", error);
-    return null;
-  }
+    try {
+        const event = await (await Event).findById(eventId).lean();
+        return event ? sanitizeEventObject(event) : null;
+    } catch (error) {
+        logError("Error getting event by ID", error);
+        return null;
+    }
 }
 
 export async function deleteEventById(eventId: string): Promise<boolean> {
-  try {
-    const result = await (await Event).findByIdAndDelete(eventId);
-    return !!result;
-  } catch (error) {
-    logError("Error deleting event by ID", error);
-    return false;
-  }
+    try {
+        const result = await (await Event).findByIdAndDelete(eventId);
+        return !!result;
+    } catch (error) {
+        logError("Error deleting event by ID", error);
+        return false;
+    }
 }
 
 type FetchFilteredEventsArgs = {
-  searchTerm?: string;
-  creatorId?: string;
-  startDate?: Date;
-  endDate?: Date;
-  page?: number;
-  limit: number;
-  sortParam?: { [key: string]: SortOrder };
+    searchTerm?: string;
+    creatorId?: string;
+    startDate?: Date;
+    endDate?: Date;
+    page?: number;
+    limit: number;
+    sortParam?: { [key: string]: SortOrder };
 };
 
 export async function fetchFilteredEvents({
-  searchTerm,
-  creatorId,
-  startDate,
-  endDate,
-  page = 0, // Default page number if not provided
-  limit,
-  sortParam = { startDate: "ascending" },
+    searchTerm,
+    creatorId,
+    startDate,
+    endDate,
+    page = 0, // Default page number if not provided
+    limit,
+    sortParam = { startDate: "ascending" },
 }: FetchFilteredEventsArgs): Promise<EventSchemaType[]> {
-  try {
-    const query: FilterQuery<EventSchemaType> = {};
+    try {
+        const query: FilterQuery<EventSchemaType> = {};
 
-    if (searchTerm) {
-      query.name = { $regex: getSearchRegex(searchTerm) };
+        if (creatorId) {
+            query.creator = creatorId;
+        }
+
+        if (startDate && endDate) {
+            query.startDate = { $gte: startDate };
+            query.endDate = { $lte: endDate };
+        } else if (startDate) {
+            query.startDate = { $gte: startDate };
+        } else if (endDate) {
+            query.endDate = { $lte: endDate };
+        }
+
+        if (!!searchTerm) {
+            const theKey = sortParam ? Object.keys(sortParam)[0] : "startDate";
+            const sort = sortParam ? { [theKey]: sortParam[theKey] === "ascending" ? 1 : -1 } : { startDate: 1 };
+            return (await (await Event).aggregate([
+                { $match: query },
+                {
+                    $search: {
+                        index: "events_search_index",
+                        text: {
+                            query: searchTerm,
+                            path: ["name", "description"],
+                            fuzzy: {
+                                maxEdits: 2,
+                                prefixLength: 0,
+                                maxExpansions: 50
+                            }
+                        },
+                        returnStoredSource: true
+                    }
+                },
+                { $sort: sort as { [key: string]: 1 | -1 } },
+                { $skip: page * limit },
+                { $limit: limit }
+            ])).map(sanitizeEventObject);
+        }
+
+        const events = await (await Event)
+            .find(query)
+            .sort(sortParam)
+            .skip(page * limit)
+            .limit(limit)
+            .lean();
+
+        return events.map(sanitizeEventObject);
+    } catch (error) {
+        logError("Error fetching filtered events", error);
+        processError(error);
+        return [];
     }
-
-    if (creatorId) {
-      query.creator = creatorId;
-    }
-
-    if (startDate && endDate) {
-      query.startDate = { $gte: startDate };
-      query.endDate = { $lte: endDate };
-    } else if (startDate) {
-      query.startDate = { $gte: startDate };
-    } else if (endDate) {
-      query.endDate = { $lte: endDate };
-    }
-
-    const events = await (
-      await Event
-    )
-      .find(query)
-      .sort(sortParam)
-      .skip(page * limit)
-      .limit(limit)
-      .lean();
-
-    return events.map(sanitizeEventObject);
-  } catch (error) {
-    logError("Error fetching filtered events", error);
-    processError(error);
-    return [];
-  }
 }
 
 // export async function getEventsByDateRange(
