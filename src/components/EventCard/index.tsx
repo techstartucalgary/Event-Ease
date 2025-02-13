@@ -14,7 +14,7 @@ export default function EventCard({ image, name, description, tags, link }: {
     const router = useRouter(); // For navigating on tag click
 
     return (
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden w-80 transition-transform transform hover:scale-105">
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
             {/* Wrap Only the Clickable Part in Link */}
             <Link href={link} passHref>
                 <div className="cursor-pointer">

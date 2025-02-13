@@ -43,28 +43,29 @@ export default function ExploreEvents() {
     );
 
     return (
-        <div className="max-w-[85%] mx-auto py-6">
-            {/* Title */}
-            <h1 className="text-3xl font-bold text-[#523D35] mb-4">Explore Events</h1>
-
-            {/* Container to match search bar width with grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {/* Search Bar - Same width as event grid */}
+        <div className="max-w-[90%] mx-auto py-6 px-4 md:px-8 lg:px-16">
+            {/* Title + search*/}
+            <div className="w-full max-w-[1200px] mx-auto">
+                <h1 className="text-3xl font-bold text-[#523D35] mb-4">Explore Events</h1>
                 <input
                     type="text"
                     placeholder="Search for events..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="col-span-full p-3 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-[#523D35]"
+                    className="w-full max-w-[1100px] p-3 border border-gray-300 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-[#523D35]"
                 />
+            </div>
 
-                {/* Responsive Grid Layout with Good Spacing */}
+            {/* ✅ Responsive Grid Layout - Moves to 3 Cards per Row at 1300px */}
+            <div className="flex flex-wrap justify-center gap-6">
                 {filteredEvents.length > 0 ? (
                     filteredEvents.map((event, index) => (
-                        <EventCard key={index} {...event} />
+                        <div key={index} className="w-full max-w-[350px] flex justify-center">
+                            <EventCard {...event} />
+                        </div>
                     ))
                 ) : (
-                    <p className="col-span-full text-gray-500 text-center">No events found.</p>
+                    <p className="w-full text-gray-500 text-center">No events found.</p>
                 )}
             </div>
         </div>
