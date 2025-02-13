@@ -6,6 +6,7 @@ type DefaultFields = {
     picture?: string,
     pushTokens: string[],
     savedEvents: string[],
+    organizations?: string[],
 }
 
 export type NewUser = {
@@ -21,9 +22,26 @@ export type BulkUserDataToUpdate = {
     name?: string,
     intro?: string,
     phoneNumber?: string,
-    picture?: string
+    picture?: string,
+    organizations?: string[],
 }
 
 export type IdAndOptionalPicture = BaseEntity & {
     picture?: string;
+}
+
+export type SessionUser = {
+    id: string,
+    email: string,
+    picture?: string,
+    fullName: string,
+    username: string
+}
+
+export type ClerkUser = {
+    id: string,
+    email: string,
+    picture?: string,
+    fullName: string,
+    username: string
 }
