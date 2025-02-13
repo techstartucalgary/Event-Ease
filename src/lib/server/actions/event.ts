@@ -2,9 +2,9 @@
 
 import { processError } from "@/lib/helpers";
 import { updateEvent } from "@/lib/server/helpers/event";
-import { EventUpdateType } from "@/lib/types/event";
+import { BulkEventDataToUpdate } from "@/lib/types/event";
 
-export async function updateEventAction(id: string, data: EventUpdateType) {
+export async function updateEventAction(id: string, data: BulkEventDataToUpdate) {
     try {
         await updateEvent(id, data);
     } catch (error) {
