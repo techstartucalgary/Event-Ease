@@ -1,29 +1,35 @@
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { SignedOut, SignedIn, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 async function RightSide() {
-    const user = null; // fetch authenticated user
-
-    if (!user) {
-        return (
-            <div className="flex items-center gap-4">
-                <button className="relative px-4 py-2 text-sm font-medium text-accent after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full">
-                    Login
-                </button>
-                <button className="px-4 py-2 text-sm font-medium text-foreground bg-background rounded-md transition-all duration-300 active:scale-95 hover:bg-accent">
-                    Signup
-                </button>
-            </div>
-        );
-    }
-
     return (
-        <div className="flex items-center">
-            <button className="px-4 py-2 text-sm font-medium text-foreground bg-background rounded-md transition-all duration-300 active:scale-95 hover:bg-accent flex items-center gap-2">
-                <span>Logout</span>
-            </button>
-        </div>
+        <>
+            <SignedOut>
+                <div className="flex items-center gap-4">
+                    <SignInButton mode="modal">
+                        <button className="relative px-4 py-2 text-sm font-medium text-accent after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full">
+                            Login
+                        </button>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                        <button className="px-4 py-2 text-sm font-medium text-foreground bg-background rounded-md transition-all duration-300 active:scale-95 hover:bg-accent">
+                            Signup
+                        </button>
+                    </SignUpButton>
+                </div>
+            </SignedOut>
+            <SignedIn>
+                <UserButton 
+                    appearance={{
+                        elements: {
+                            userButtonBox: "h-8 w-8"
+                        }
+                    }}
+                />
+            </SignedIn>
+        </>
     );
 }
 
