@@ -3,6 +3,7 @@ import { BaseModel, EntityType } from ".";
 export type NewEvent = {
   name: string;
   description: string;
+  images: string[];
   creator: string;
   creatorType: EntityType;
   location: string;

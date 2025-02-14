@@ -6,6 +6,7 @@ export async function POST(req: Request) {
         const {
             name,
             description,
+            images,
             creator,
             creatorType,
             location,
@@ -16,6 +17,7 @@ export async function POST(req: Request) {
         const event = await createEvent({
             name,
             description,
+            images,
             creator,
             creatorType,
             location,
