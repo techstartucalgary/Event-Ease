@@ -2,7 +2,8 @@ import { Event } from "@/lib/server/models";
 import {
     parseToJSON,
     processError,
-    logError
+    logError,
+    prefixWithCloudUrl
 } from "@/lib/helpers";
 import {
     NewEvent,
@@ -60,7 +61,7 @@ export async function updateEvent(
     }
 }
 
-function sanitizeEventObject<T extends EventSchemaType>(event: T): T {
+function sanitizeEventObject<T extends EventSchemaType>(event: T): EventSchemaType {
     const status =
         event.startDate && event.endDate
             ? new Date() < event.startDate
@@ -70,9 +71,12 @@ function sanitizeEventObject<T extends EventSchemaType>(event: T): T {
                     : "Ongoing"
             : "Unknown";
 
+    const { images, ...rest } = parseToJSON(event);
+
     return {
-        ...parseToJSON(event),
+        ...rest,
         status,
+        images: images.map(image => prefixWithCloudUrl("Events", `${event._id}/${image}`))
     };
 }
 
@@ -137,7 +141,6 @@ export async function fetchFilteredEvents({
             const theKey = sortParam ? Object.keys(sortParam)[0] : "startDate";
             const sort = sortParam ? { [theKey]: sortParam[theKey] === "ascending" ? 1 : -1 } : { startDate: 1 };
             return (await (await Event).aggregate([
-                { $match: query },
                 {
                     $search: {
                         index: "events_search_index",
@@ -153,6 +156,7 @@ export async function fetchFilteredEvents({
                         returnStoredSource: true
                     }
                 },
+                { $match: query },
                 { $sort: sort as { [key: string]: 1 | -1 } },
                 { $skip: page * limit },
                 { $limit: limit }

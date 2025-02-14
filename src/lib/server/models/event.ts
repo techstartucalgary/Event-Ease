@@ -21,6 +21,10 @@ const EventSchema = new Schema<EventSchemaType>(
             type: String,
             required: true,
         },
+        images: {
+            type: [String],
+            required: true,
+        },
         creator: {
             type: String,
             required: true,
@@ -52,6 +56,7 @@ export function validateNewEventData(params: NewEvent) {
     const {
         name,
         description,
+        images,
         creator,
         creatorType,
         location,
@@ -62,6 +67,7 @@ export function validateNewEventData(params: NewEvent) {
     const schema = yup.object().shape({
         name: getStringSchema({ message: "Event name is required" }),
         description: getStringSchema({ message: "Event description is required" }),
+        images: yup.array().of(yup.string()).required("Images are required"),
         creator: getStringSchema({ message: "Creator ID is required" }),
         creatorType: yup
             .string()
@@ -78,6 +84,7 @@ export function validateNewEventData(params: NewEvent) {
     return schema.validateSync({
         name,
         description,
+        images,
         creator,
         creatorType,
         location,
