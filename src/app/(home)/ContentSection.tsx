@@ -107,7 +107,7 @@ export default function ContentSection() {
                             <p className="text-gray-700 leading-relaxed">
                                 Intuitive tools and workflows that make event
                                 planning effortless. From registration to
-                                follow-ups, we've got you covered.
+                                follow-ups, we&apos;ve got you covered.
                             </p>
                         </div>
 
@@ -166,7 +166,7 @@ export default function ContentSection() {
 
                                 {/* Quote Text */}
                                 <p className="text-gray-300 mb-6 leading-relaxed">
-                                    "{testimonial.quote}"
+                                    &ldquo;{testimonial.quote}&rdquo;
                                 </p>
 
                                 {/* Author Info */}
