@@ -10,43 +10,53 @@ export default function ExploreEvents() {
             name: "Tech Conference 2025",
             description: "Join industry leaders for an immersive experience.",
             tags: ["Tech", "Conference"],
-            link: "/events/tech-conference-2025"
+            link: "/events/tech-conference-2025",
         },
         {
             image: "/images/hackathon.png",
             name: "Startup Pitch Night",
-            description: "Compete in a 48-hour AI hackathon and build cutting-edge solutions with a team of innovators.",
+            description:
+                "Compete in a 48-hour AI hackathon and build cutting-edge solutions with a team of innovators.",
             tags: ["Hackathon", "AI", "Competition"],
-            link: "/events/eventlink"
+            link: "/events/startup-pitch-night",
         },
         {
             image: "/images/startup.jpg",
             name: "Startup Pitch Night",
-            description: "Pitch your startup idea to investors and network with entrepreneurs in the industry.",
+            description:
+                "Pitch your startup idea to investors and network with entrepreneurs in the industry.",
             tags: ["Startups", "Entrepreneurship", "Investment"],
-            link: "/events/eventlink"
+            link: "/events/startup-pitch-night",
         },
         {
             image: "/images/networking.jpg",
             name: "Tech Networking Mixer",
-            description: "Meet tech professionals, developers, and recruiters to expand your network in the industry.",
+            description:
+                "Meet tech professionals, developers, and recruiters to expand your network in the industry.",
             tags: ["Networking", "Career", "Tech"],
-            link: "/events/eventlink"
-        }
+            link: "/events/tech-networking-mixer",
+        },
     ];
 
     // Filtered events based on search term
-    const filteredEvents = events.filter(event =>
-        event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+    const filteredEvents = events.filter(
+        (event) =>
+            event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            event.description
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
+            event.tags.some((tag) =>
+                tag.toLowerCase().includes(searchTerm.toLowerCase())
+            )
     );
 
     return (
         <div className="max-w-[90%] mx-auto py-6 px-4 md:px-8 lg:px-16">
             {/* Title + search*/}
             <div className="w-full max-w-[1200px] mx-auto">
-                <h1 className="text-3xl font-bold text-[#523D35] mb-4">Explore Events</h1>
+                <h1 className="text-3xl font-bold text-[#523D35] mb-4">
+                    Explore Events
+                </h1>
                 <input
                     type="text"
                     placeholder="Search for events..."
@@ -60,12 +70,17 @@ export default function ExploreEvents() {
             <div className="flex flex-wrap justify-center gap-6">
                 {filteredEvents.length > 0 ? (
                     filteredEvents.map((event, index) => (
-                        <div key={index} className="w-full max-w-[350px] flex justify-center">
+                        <div
+                            key={index}
+                            className="w-full max-w-[350px] flex justify-center"
+                        >
                             <EventCard {...event} />
                         </div>
                     ))
                 ) : (
-                    <p className="w-full text-gray-500 text-center">No events found.</p>
+                    <p className="w-full text-gray-500 text-center">
+                        No events found.
+                    </p>
                 )}
             </div>
         </div>

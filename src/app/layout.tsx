@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import GlobalProvider from "@/contexts";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const outfit = Outfit({
     subsets: ["latin"],
