@@ -1,5 +1,4 @@
 import { Chat, Attendee } from "../types";
-import Image from "next/image";
 
 interface ChatListProps {
     chats: Chat[];
@@ -10,7 +9,6 @@ interface ChatListProps {
 
 export default function ChatList({
     chats,
-    selectedChat,
     onChatSelect,
     currentUserId,
 }: ChatListProps) {
