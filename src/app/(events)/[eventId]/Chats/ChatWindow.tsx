@@ -91,7 +91,7 @@ export default function ChatWindow({
                                     className={`text-xs mt-1 
                                     ${
                                         message.senderId === currentUserId
-                                            ? "text-surface"
+                                            ? "text-gray-200"
                                             : "text-gray-500"
                                     }`}
                                 >

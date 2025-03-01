@@ -14,7 +14,7 @@ export default function EventDashboard() {
     const renderContent = () => {
         switch (activeTab) {
             case "news":
-                return <NewsFeed />;
+                return <NewsFeed onTabChange={setActiveTab} />;
             case "itinerary":
                 return <div>Itinerary Content</div>;
             case "chats":

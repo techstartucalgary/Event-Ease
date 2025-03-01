@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Attendee } from "../types";
 import AttendeeCard from "./AttendeeCard";
 
-const MOCK_ATTENDEES: Attendee[] = [
+export const MOCK_ATTENDEES: Attendee[] = [
     {
         id: "1",
         name: "Alice Chen",

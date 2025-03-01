@@ -9,6 +9,7 @@ interface ChatListProps {
 
 export default function ChatList({
     chats,
+    selectedChat,
     onChatSelect,
     currentUserId,
 }: ChatListProps) {
@@ -29,10 +30,17 @@ export default function ChatList({
             <div className="divide-y divide-gray-200 w-full max-w-full">
                 {chats.map((chat) => {
                     const otherParticipant = getOtherParticipant(chat);
+                    const isSelected = selectedChat?.id === chat.id;
+
                     return (
                         <div key={chat.id} className="w-full">
                             <div
-                                className="p-4 flex items-center gap-3 hover:bg-gray-50 transition-colors cursor-pointer"
+                                className={`p-4 flex items-center gap-3 hover:bg-gray-100 transition-colors cursor-pointer
+                                    ${
+                                        isSelected
+                                            ? "bg-gray-100 border-l-4 border-surface"
+                                            : "hover:bg-gray-50"
+                                    }`}
                                 onClick={() => onChatSelect(chat)}
                             >
                                 <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center text-foreground bg-background">

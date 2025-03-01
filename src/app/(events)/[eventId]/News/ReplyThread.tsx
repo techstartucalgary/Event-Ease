@@ -4,18 +4,25 @@ import { Reply } from "../types";
 interface ReplyThreadProps {
     reply: Reply;
     depth?: number;
+    onNameClick: (author: string) => void;
 }
 
-export default function ReplyThread({ reply, depth = 0 }: ReplyThreadProps) {
+export default function ReplyThread({
+    reply,
+    depth = 0,
+    onNameClick,
+}: ReplyThreadProps) {
     const [isReplying, setIsReplying] = useState(false);
     const [replyText, setReplyText] = useState("");
-    const [isCollapsed, setIsCollapsed] = useState(false);
     const hasReplies = reply.replies && reply.replies.length > 0;
 
     return (
         <div className={`ml-${depth * 4} p-2 bg-gray-50 rounded-lg`}>
             <div className="flex justify-between items-center mb-2">
-                <p className="text-sm font-semibold text-gray-800">
+                <p
+                    className="text-sm font-semibold text-gray-800 cursor-pointer hover:text-blue-600"
+                    onClick={() => onNameClick(reply.author)}
+                >
                     {reply.author}
                 </p>
                 <button
@@ -48,31 +55,13 @@ export default function ReplyThread({ reply, depth = 0 }: ReplyThreadProps) {
                 </div>
             )}
 
-            {hasReplies && (
-                <div className="mt-2">
-                    <button
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                        className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200 flex items-center gap-1"
-                    >
-                        <i
-                            className={`fas fa-chevron-${
-                                isCollapsed ? "down" : "up"
-                            } text-xs`}
-                        ></i>
-                        {isCollapsed ? "Show replies" : "Hide replies"}
-                        <span className="text-xs">
-                            ({reply.replies?.length})
-                        </span>
-                    </button>
-                </div>
-            )}
-
-            {!isCollapsed &&
+            {hasReplies &&
                 reply.replies?.map((nestedReply) => (
                     <ReplyThread
                         key={nestedReply.id}
                         reply={nestedReply}
                         depth={depth + 1}
+                        onNameClick={onNameClick}
                     />
                 ))}
         </div>

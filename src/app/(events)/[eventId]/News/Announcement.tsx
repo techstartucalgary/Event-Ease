@@ -4,9 +4,13 @@ import ReplyThread from "./ReplyThread";
 
 interface AnnouncementProps {
     announcement: AnnouncementType;
+    onNameClick: (author: string) => void;
 }
 
-export default function Announcement({ announcement }: AnnouncementProps) {
+export default function Announcement({
+    announcement,
+    onNameClick,
+}: AnnouncementProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isReplying, setIsReplying] = useState(false);
     const [replyText, setReplyText] = useState("");
@@ -19,7 +23,10 @@ export default function Announcement({ announcement }: AnnouncementProps) {
                     <i className="fas fa-user"></i>
                 </div>
                 <div>
-                    <div className="font-semibold text-gray-900">
+                    <div
+                        className="font-semibold text-gray-900 cursor-pointer hover:text-blue-600"
+                        onClick={() => onNameClick(announcement.author)}
+                    >
                         {announcement.author}
                     </div>
                     <div className="text-sm text-gray-600">
@@ -87,7 +94,11 @@ export default function Announcement({ announcement }: AnnouncementProps) {
             {isExpanded && hasReplies && (
                 <div className="mt-4 space-y-4">
                     {announcement.replies.map((reply) => (
-                        <ReplyThread key={reply.id} reply={reply} />
+                        <ReplyThread
+                            key={reply.id}
+                            reply={reply}
+                            onNameClick={onNameClick}
+                        />
                     ))}
                 </div>
             )}

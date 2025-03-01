@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Announcement from "./Announcement";
 import { Announcement as AnnouncementType } from "../types";
+import { MOCK_ATTENDEES } from "../Attendees";
 
 // Mock data - replace with real data fetching
 const MOCK_ANNOUNCEMENTS: AnnouncementType[] = [
@@ -9,8 +10,8 @@ const MOCK_ANNOUNCEMENTS: AnnouncementType[] = [
         message:
             "Hackathon starts now! Good Luck. Submissions are due tomorrow at 2pm.",
         timestamp: "Jan 22, 9:00AM",
-        author: "Organizer",
-        organization: "Company",
+        author: "Sarah Johnson",
+        organization: "Event Organizer",
         replies: [
             {
                 id: 101,
@@ -22,7 +23,7 @@ const MOCK_ANNOUNCEMENTS: AnnouncementType[] = [
                         id: 1011,
                         message:
                             "Please submit through DevPost with your GitHub repository link",
-                        author: "Organizer",
+                        author: "Sarah Johnson",
                         timestamp: "Jan 22, 9:10AM",
                     },
                 ],
@@ -39,7 +40,8 @@ const MOCK_ANNOUNCEMENTS: AnnouncementType[] = [
         id: 2,
         message: "Lunch will be served in 10 mins!",
         timestamp: "Jan 22, 12:20PM",
-        author: "Event Staff",
+        author: "Eva Martinez",
+        organization: "Event Staff",
         replies: [],
     },
     {
@@ -47,12 +49,17 @@ const MOCK_ANNOUNCEMENTS: AnnouncementType[] = [
         message:
             "TAs logging off for the day. Reminder submissions are due tomorrow at 2pm and judging is at 3pm.",
         timestamp: "Jan 22, 8:00PM",
-        author: "Teaching Assistant",
+        author: "Mike Wilson",
+        organization: "Teaching Assistant",
         replies: [],
     },
 ];
 
-export default function NewsFeed() {
+interface NewsFeedProps {
+    onTabChange?: (tab: string) => void;
+}
+
+export default function NewsFeed({ onTabChange }: NewsFeedProps) {
     const [announcements] = useState<AnnouncementType[]>(MOCK_ANNOUNCEMENTS);
     const [timeRemaining, setTimeRemaining] = useState({
         hours: 17,
@@ -92,6 +99,14 @@ export default function NewsFeed() {
             console.log("New Announcement:", newAnnouncement);
             setNewAnnouncement("");
             setIsPosting(false);
+        }
+    };
+
+    const handleNameClick = (author: string) => {
+        const attendee = MOCK_ATTENDEES.find((a) => a.name === author);
+        if (attendee) {
+            localStorage.setItem("selectedChatUser", JSON.stringify(attendee));
+            onTabChange?.("chats");
         }
     };
 
@@ -144,6 +159,7 @@ export default function NewsFeed() {
                 <Announcement
                     key={announcement.id}
                     announcement={announcement}
+                    onNameClick={handleNameClick}
                 />
             ))}
         </div>
