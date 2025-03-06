@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Announcement from "./Announcement";
 import { Announcement as AnnouncementType } from "../types";
-import { MOCK_ATTENDEES } from "../Attendees";
+import { MOCK_ATTENDEES } from "../attendees";
 
 // Mock data - replace with real data fetching
 const MOCK_ANNOUNCEMENTS: AnnouncementType[] = [

@@ -1,17 +1,12 @@
 import { ReactNode, useState } from "react";
-import Sidebar from "../[eventId]/Sidebar";
+import Sidebar from "./Sidebar";
 
 interface LayoutProps {
     children: ReactNode;
     activeTab: string;
-    onTabChange: (tab: string) => void;
 }
 
-export default function Layout({
-    children,
-    activeTab,
-    onTabChange,
-}: LayoutProps) {
+export default function Layout({ children, activeTab }: LayoutProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
@@ -22,7 +17,6 @@ export default function Layout({
                     <Sidebar
                         activeTab={activeTab}
                         isMobileMenuOpen={isMobileMenuOpen}
-                        onTabChange={onTabChange}
                         onMobileMenuClose={() => setIsMobileMenuOpen(false)}
                     />
 
