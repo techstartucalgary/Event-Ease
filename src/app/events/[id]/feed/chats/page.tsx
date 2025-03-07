@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from "react";
 import { Chat, Attendee, Message } from "../types";
 import ChatList from "./ChatList";

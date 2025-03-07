@@ -1,12 +1,13 @@
+"use client";
+
 import { ReactNode, useState } from "react";
 import Sidebar from "./Sidebar";
 
 interface LayoutProps {
-    children: ReactNode;
-    activeTab: string;
+    children: ReactNode
 }
 
-export default function Layout({ children, activeTab }: LayoutProps) {
+export default function Layout({ children }: LayoutProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
@@ -15,7 +16,6 @@ export default function Layout({ children, activeTab }: LayoutProps) {
                 <div className="px-16 max-lg:px-12 max-md:px-0 mx-auto flex h-full">
                     {/* Sidebar (handles both mobile and desktop) */}
                     <Sidebar
-                        activeTab={activeTab}
                         isMobileMenuOpen={isMobileMenuOpen}
                         onMobileMenuClose={() => setIsMobileMenuOpen(false)}
                     />

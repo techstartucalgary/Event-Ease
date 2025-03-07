@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Reply } from "../types";
+import { Reply } from "./types";
 
 interface ReplyThreadProps {
     reply: Reply;

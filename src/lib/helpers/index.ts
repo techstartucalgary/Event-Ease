@@ -47,7 +47,7 @@ export function getStringSchema({ required = true, message }: StringSchemaOption
 export const cloudFolders = ["Users", "Organizations", "Events"] as const;
 
 export const prefixWithCloudUrl = (folder: CloudFolder, arg: string) => {
-    return `${process.env.AWS_CLOUDFRONT_URL}/${folder}${arg.startsWith("/") ? arg : `/${arg}`}`
+    return `${process.env.AWS_CLOUDFRONT_URL}${folder}${arg.startsWith("/") ? arg : `/${arg}`}`
 }
 
 export function parseToJSON<T>(arg: T): T {
@@ -57,3 +57,56 @@ export function parseToJSON<T>(arg: T): T {
 export function getSearchRegex(searchTerm: string) {
     return new RegExp(`.*${searchTerm.trim()}.*`, 'i');
 }
+
+export interface Attendee {
+    id: string;
+    name: string;
+    role: string;
+    email: string;
+    team?: string;
+    avatar?: string;
+    checkInTime?: string;
+}
+
+export const MOCK_ATTENDEES: Attendee[] = [
+    {
+        id: "1",
+        name: "Alice Chen",
+        role: "Developer",
+        email: "alice@example.com",
+        team: "Team Innovate",
+        checkInTime: "9:30 AM",
+    },
+    {
+        id: "2",
+        name: "Bob Smith",
+        role: "Designer",
+        email: "bob@example.com",
+        team: "Team Innovate",
+        checkInTime: "9:45 AM",
+    },
+    {
+        id: "3",
+        name: "Sarah Johnson",
+        role: "Product Manager",
+        email: "sarah@example.com",
+        team: "Team Create",
+        checkInTime: "10:15 AM",
+    },
+    {
+        id: "4",
+        name: "Mike Wilson",
+        role: "Marketing",
+        email: "mike@example.com",
+        team: "Team Create",
+        checkInTime: "10:15 AM",
+    },
+    {
+        id: "5",
+        name: "Eva Martinez",
+        role: "Developer",
+        email: "eva@example.com",
+        team: "Team Create",
+        checkInTime: "9:15 AM",
+    },
+];

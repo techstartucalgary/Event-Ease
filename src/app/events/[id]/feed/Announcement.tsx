@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Announcement as AnnouncementType } from "../types";
+import { Announcement as AnnouncementType } from "./types";
 import ReplyThread from "./ReplyThread";
 
 interface AnnouncementProps {

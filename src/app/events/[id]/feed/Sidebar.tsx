@@ -1,17 +1,21 @@
+"use client";
+
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 interface SidebarProps {
-    activeTab: string;
     isMobileMenuOpen: boolean;
     onMobileMenuClose: () => void;
 }
 
 export default function Sidebar({
-    activeTab,
     isMobileMenuOpen,
     onMobileMenuClose,
 }: SidebarProps) {
+    const pathname = usePathname();
+
+    const activeTab = pathname.split("/").pop();
+    
     const { eventId } = useParams();
 
     // Define navigation items

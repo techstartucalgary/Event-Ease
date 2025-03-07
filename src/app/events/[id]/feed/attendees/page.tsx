@@ -1,56 +1,12 @@
+"use client";
+
 import { useState } from "react";
 import { Attendee } from "../types";
 import AttendeeCard from "./AttendeeCard";
 import { useRouter, useParams } from "next/navigation";
+import { MOCK_ATTENDEES } from "@/lib/helpers";
 
-export const MOCK_ATTENDEES: Attendee[] = [
-    {
-        id: "1",
-        name: "Alice Chen",
-        role: "Developer",
-        email: "alice@example.com",
-        team: "Team Innovate",
-        checkInTime: "9:30 AM",
-    },
-    {
-        id: "2",
-        name: "Bob Smith",
-        role: "Designer",
-        email: "bob@example.com",
-        team: "Team Innovate",
-        checkInTime: "9:45 AM",
-    },
-    {
-        id: "3",
-        name: "Sarah Johnson",
-        role: "Product Manager",
-        email: "sarah@example.com",
-        team: "Team Create",
-        checkInTime: "10:15 AM",
-    },
-    {
-        id: "4",
-        name: "Mike Wilson",
-        role: "Marketing",
-        email: "mike@example.com",
-        team: "Team Create",
-        checkInTime: "10:15 AM",
-    },
-    {
-        id: "5",
-        name: "Eva Martinez",
-        role: "Developer",
-        email: "eva@example.com",
-        team: "Team Create",
-        checkInTime: "9:15 AM",
-    },
-];
-
-interface AttendeesListProps {
-    onTabChange?: (tab: string) => void;
-}
-
-export default function AttendeesList({ onTabChange }: AttendeesListProps) {
+export default function AttendeesList() {
     const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();
     const params = useParams();
@@ -68,13 +24,8 @@ export default function AttendeesList({ onTabChange }: AttendeesListProps) {
         // Store the selected attendee in localStorage
         localStorage.setItem("selectedChatUser", JSON.stringify(attendee));
 
-        // If onTabChange is provided, use it (for layout with tabs)
-        if (onTabChange) {
-            onTabChange("chats");
-        } else {
-            // Otherwise, navigate directly to the chats page
-            router.push(`/event/${eventId}/chats`);
-        }
+        // Otherwise, navigate directly to the chats page
+        router.push(`/event/${eventId}/chats`);
     };
 
     const handleExportClick = () => {

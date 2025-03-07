@@ -1,7 +1,9 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import Announcement from "./Announcement";
-import { Announcement as AnnouncementType } from "../types";
-import { MOCK_ATTENDEES } from "../attendees";
+import { Announcement as AnnouncementType } from "./types";
+import { MOCK_ATTENDEES } from "@/lib/helpers";
 
 // Mock data - replace with real data fetching
 const MOCK_ANNOUNCEMENTS: AnnouncementType[] = [
@@ -55,11 +57,8 @@ const MOCK_ANNOUNCEMENTS: AnnouncementType[] = [
     },
 ];
 
-interface NewsFeedProps {
-    onTabChange?: (tab: string) => void;
-}
 
-export default function NewsFeed({ onTabChange }: NewsFeedProps) {
+export default function NewsFeed() {
     const [announcements] = useState<AnnouncementType[]>(MOCK_ANNOUNCEMENTS);
     const [timeRemaining, setTimeRemaining] = useState({
         hours: 17,
@@ -106,7 +105,6 @@ export default function NewsFeed({ onTabChange }: NewsFeedProps) {
         const attendee = MOCK_ATTENDEES.find((a) => a.name === author);
         if (attendee) {
             localStorage.setItem("selectedChatUser", JSON.stringify(attendee));
-            onTabChange?.("chats");
         }
     };
 
