@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Attendee } from "../types";
 import AttendeeCard from "./AttendeeCard";
+import { useRouter, useParams } from "next/navigation";
 
 export const MOCK_ATTENDEES: Attendee[] = [
     {
@@ -51,6 +52,9 @@ interface AttendeesListProps {
 
 export default function AttendeesList({ onTabChange }: AttendeesListProps) {
     const [searchTerm, setSearchTerm] = useState("");
+    const router = useRouter();
+    const params = useParams();
+    const eventId = params.eventId;
 
     const filteredAttendees = MOCK_ATTENDEES.filter((attendee) => {
         return (
@@ -61,10 +65,16 @@ export default function AttendeesList({ onTabChange }: AttendeesListProps) {
     });
 
     const handleMessageClick = (attendee: Attendee) => {
-        // Store the selected attendee in localStorage or state management
+        // Store the selected attendee in localStorage
         localStorage.setItem("selectedChatUser", JSON.stringify(attendee));
-        // Switch to the chats tab
-        onTabChange?.("chats");
+
+        // If onTabChange is provided, use it (for layout with tabs)
+        if (onTabChange) {
+            onTabChange("chats");
+        } else {
+            // Otherwise, navigate directly to the chats page
+            router.push(`/event/${eventId}/chats`);
+        }
     };
 
     const handleExportClick = () => {
