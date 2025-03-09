@@ -1,14 +1,23 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { getEventById } from "@/lib/server/helpers/event";
 
-export default function EventDetail() {
-    const { id } = useParams();
+type Props = {
+    params: Promise<{ id: string }>
+}
+export default async function EventDetail({ params }: Props) {
+    const { id } = await params;
+
+    const event = await getEventById(id);
+
+    if (!event) {
+        return <div>Event not found</div>;
+    }
+
+    console.log("event", event);
 
     // Hardcoded event data for now
-    const event = {
+    /* const event = {
         id,
         name: "Google Cloud x MLB(TM) Hackathon",
         description:
@@ -21,13 +30,13 @@ export default function EventDetail() {
             type: "Organizer",
             image: "/images/tech.jpg",
         },
-    };
+    }; */
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
             {/* Back Button */}
             <Link
-                href="/explore"
+                href="/events"
                 className="inline-flex items-center text-surface hover:opacity-80 transition-opacity mb-8"
             >
                 ← Explore Events
@@ -39,7 +48,7 @@ export default function EventDetail() {
                 <div className="relative w-full h-fit">
                     <div className="relative aspect-[3/2] w-full">
                         <Image
-                            src={event.image}
+                            src={event.images[0]}
                             alt={event.name}
                             fill
                             className="object-cover rounded-lg"
@@ -62,16 +71,16 @@ export default function EventDetail() {
                                 Time
                             </p>
                             <p className="text-surface font-medium">
-                                {event.time}
+                                {event.startDate.toLocaleString()}
                             </p>
                         </div>
                         <div className="flex flex-col gap-1">
                             <p className="text-sm text-gray-500 uppercase tracking-wide">
                                 Price
                             </p>
-                            <p className="text-surface font-medium">
-                                {event.price}
-                            </p>
+                            {/* <p className="text-surface font-medium">
+                                {event.}
+                            </p> */}
                         </div>
                     </div>
 
@@ -107,18 +116,18 @@ export default function EventDetail() {
                 <div className="flex items-center gap-3">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden">
                         <Image
-                            src={event.organizer.image}
-                            alt={event.organizer.name}
+                            src={event.images[0]}
+                            alt={event.creator}
                             fill
                             className="object-cover"
                         />
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-surface font-medium">
-                            {event.organizer.name}
+                            {event.creator}
                         </span>
                         <span className="text-gray-500 text-sm">
-                            {event.organizer.type}
+                            {event.creatorType}
                         </span>
                     </div>
                 </div>

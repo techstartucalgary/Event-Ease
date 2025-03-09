@@ -3,6 +3,7 @@
 import EventCard from "@/components/EventCard";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const testimonials = [
     {
@@ -43,12 +44,12 @@ export default function ContentSection() {
                         <h2 className="text-4xl font-bold text-[#2D3436]">
                             Featured Events
                         </h2>
-                        <a
-                            href="/explore"
+                        <Link
+                            href="/events"
                             className="text-[#5D6D7E] hover:text-[#34495E] transition-colors"
                         >
                             View all events →
-                        </a>
+                        </Link>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
