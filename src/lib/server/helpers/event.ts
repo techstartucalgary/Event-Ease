@@ -3,7 +3,7 @@ import {
     parseToJSON,
     processError,
     logError,
-    prefixWithCloudUrl
+    prefixWithCloudUrl,
 } from "@/lib/helpers";
 import {
     NewEvent,
@@ -61,14 +61,16 @@ export async function updateEvent(
     }
 }
 
-function sanitizeEventObject<T extends EventSchemaType>(event: T): EventSchemaType {
+function sanitizeEventObject<T extends EventSchemaType>(
+    event: T
+): EventSchemaType {
     const status =
         event.startDate && event.endDate
             ? new Date() < event.startDate
                 ? "Upcoming"
                 : new Date() > event.endDate
-                    ? "Completed"
-                    : "Ongoing"
+                ? "Completed"
+                : "Ongoing"
             : "Unknown";
 
     const { images, ...rest } = parseToJSON(event);
@@ -76,7 +78,9 @@ function sanitizeEventObject<T extends EventSchemaType>(event: T): EventSchemaTy
     return {
         ...rest,
         status,
-        images: images.map(image => prefixWithCloudUrl("Events", `${event._id}/${image}`))
+        images: images.map((image) =>
+            prefixWithCloudUrl("Events", `${event._id}/${image}`)
+        ),
     };
 }
 
@@ -110,6 +114,8 @@ type FetchFilteredEventsArgs = {
     page?: number;
     limit: number;
     sortParam?: { [key: string]: SortOrder };
+    priceRange?: { min: number; max?: number };
+    categories?: string[];
 };
 
 export async function fetchFilteredEvents({
@@ -117,10 +123,11 @@ export async function fetchFilteredEvents({
     creatorId,
     startDate,
     endDate,
-    page = 0, // Default page number if not provided
+    page = 0,
     limit,
     sortParam = { startDate: "ascending" },
-}: FetchFilteredEventsArgs): Promise<EventSchemaType[]> {
+}: // TODO: add priceRange and categories
+FetchFilteredEventsArgs): Promise<EventSchemaType[]> {
     try {
         const query: FilterQuery<EventSchemaType> = {};
 
@@ -139,31 +146,48 @@ export async function fetchFilteredEvents({
 
         if (!!searchTerm) {
             const theKey = sortParam ? Object.keys(sortParam)[0] : "startDate";
-            const sort = sortParam ? { [theKey]: sortParam[theKey] === "ascending" ? 1 : -1 } : { startDate: 1 };
-            return (await (await Event).aggregate([
-                {
-                    $search: {
-                        index: "events_search_index",
-                        text: {
-                            query: searchTerm,
-                            path: ["name", "description"],
-                            fuzzy: {
-                                maxEdits: 2,
-                                prefixLength: 0,
-                                maxExpansions: 50
-                            }
+            const sort = sortParam
+                ? { [theKey]: sortParam[theKey] === "ascending" ? 1 : -1 }
+                : { startDate: 1 };
+            return (
+                await (
+                    await Event
+                ).aggregate([
+                    {
+                        $search: {
+                            index: "events_search_index",
+                            text: {
+                                query: searchTerm,
+                                path: ["name", "description"],
+                                fuzzy: {
+                                    maxEdits: 2,
+                                    prefixLength: 0,
+                                    maxExpansions: 50,
+                                },
+                            },
+                            returnStoredSource: true,
                         },
-                        returnStoredSource: true
-                    }
-                },
-                { $match: query },
-                { $sort: sort as { [key: string]: 1 | -1 } },
-                { $skip: page * limit },
-                { $limit: limit }
-            ])).map(sanitizeEventObject);
+                    },
+                    { $match: query },
+                    { $sort: sort as { [key: string]: 1 | -1 } },
+                    { $skip: page * limit },
+                    { $limit: limit },
+                ])
+            ).map(sanitizeEventObject);
         }
 
-        const events = await (await Event)
+        // Commented out for now as we don't have a price field in the events collection
+        // if (priceRange) {
+        //     if (priceRange.max !== undefined) {
+        //         query.price = { $gte: priceRange.min, $lte: priceRange.max };
+        //     } else {
+        //         query.price = { $gte: priceRange.min };
+        //     }
+        // }
+
+        const events = await (
+            await Event
+        )
             .find(query)
             .sort(sortParam)
             .skip(page * limit)
