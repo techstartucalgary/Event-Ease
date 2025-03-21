@@ -5,12 +5,14 @@ import EventCard from "@/components/EventCard"; // Ensure the path is correct
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { searchEventsAction } from "@/lib/server/actions/event";
 import { EventSchemaType } from "@/lib/types/event";
+import { useFilters } from "@/contexts/FilterContext";
 
 const LIMIT = 6; // Number of events per page
 
 export default function ExploreEvents() {
     const [searchTerm, setSearchTerm] = useState("");
-    
+    const { filters, isFiltersApplied } = useFilters();
+
     // Use infinite query to fetch events
     const {
         data,
@@ -18,14 +20,18 @@ export default function ExploreEvents() {
         hasNextPage,
         isFetchingNextPage,
         status,
-        error
+        error,
     } = useInfiniteQuery({
-        queryKey: ['events', searchTerm],
+        queryKey: ["events", searchTerm, filters, isFiltersApplied],
         queryFn: async ({ pageParam = 1 }) => {
             return searchEventsAction({
                 searchTerm,
                 page: pageParam,
-                limit: LIMIT
+                limit: LIMIT,
+                date: filters.date,
+                sort: filters.sort,
+                priceRange: filters.priceRange,
+                categories: filters.categories,
             });
         },
         getNextPageParam: (lastPage, allPages) => {
@@ -37,15 +43,6 @@ export default function ExploreEvents() {
 
     // Flatten the pages array to get all events
     const events: EventSchemaType[] = data?.pages.flat() || [];
-
-    // Filtered events based on search term
-    const filteredEvents = events.filter(
-        (event) =>
-            event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            event.description
-                .toLowerCase()
-                .includes(searchTerm.toLowerCase())
-    );
 
     return (
         <div className="max-w-[90%] mx-auto py-6 px-4 md:px-8 lg:px-16">
@@ -81,14 +78,14 @@ export default function ExploreEvents() {
 
             {/* Events grid */}
             <div className="flex flex-wrap justify-center gap-6">
-                {status === 'pending' ? (
+                {status === "pending" ? (
                     <div className="text-center py-10">Loading events...</div>
-                ) : status === 'error' ? (
+                ) : status === "error" ? (
                     <div className="text-center py-10 text-red-500">
                         Error loading events: {error.message}
                     </div>
-                ) : filteredEvents.length > 0 ? (
-                    filteredEvents.map((event) => (
+                ) : events.length > 0 ? (
+                    events.map((event) => (
                         <div
                             key={event._id}
                             className="w-full max-w-[350px] flex justify-center"
@@ -115,7 +112,9 @@ export default function ExploreEvents() {
                         disabled={isFetchingNextPage}
                         className="bg-[#523D35] text-white px-6 py-2 rounded-lg hover:bg-[#3a2b26] transition disabled:opacity-50"
                     >
-                        {isFetchingNextPage ? "Loading more..." : "Load more events"}
+                        {isFetchingNextPage
+                            ? "Loading more..."
+                            : "Load more events"}
                     </button>
                 </div>
             )}
