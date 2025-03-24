@@ -57,7 +57,6 @@ const MOCK_ANNOUNCEMENTS: AnnouncementType[] = [
     },
 ];
 
-
 export default function NewsFeed() {
     const [announcements] = useState<AnnouncementType[]>(MOCK_ANNOUNCEMENTS);
     const [timeRemaining, setTimeRemaining] = useState({
@@ -134,22 +133,41 @@ export default function NewsFeed() {
             </div>
 
             {isPosting && (
-                <div className="mb-4">
+                <div className="mb-6 bg-white rounded-xl shadow-sm p-5 border border-gray-100 transition-all duration-300">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 bg-gray-100 text-tertiary rounded-full flex items-center justify-center">
+                            <i className="fas fa-user"></i>
+                        </div>
+                    </div>
+
                     <textarea
                         value={newAnnouncement}
                         onChange={(e) => setNewAnnouncement(e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg"
-                        placeholder="Write your announcement..."
-                        rows={3}
+                        className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-tertiary focus:border-transparent resize-none transition-all duration-200"
+                        placeholder="Share an announcement with attendees..."
+                        rows={4}
                     />
-                    <button
-                        onClick={handlePost}
-                        className="mt-2 px-4 py-2 bg-gradient-to-r from-[#223030] to-[#2d4040] text-[#DFEBF6] rounded-lg 
-                                font-medium transition-all duration-300 hover:opacity-90
-                                border border-white/10 shadow-lg hover:shadow-xl active:scale-95"
-                    >
-                        Submit
-                    </button>
+
+                    <div className="flex justify-between items-center mt-4">
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setIsPosting(false)}
+                                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handlePost}
+                                disabled={!newAnnouncement.trim()}
+                                className="px-6 py-2 bg-gradient-to-r from-[#223030] to-[#2d4040] text-[#DFEBF6] rounded-lg 
+                                        font-medium transition-all duration-300 hover:opacity-90
+                                        border border-white/10 shadow-lg hover:shadow-xl active:scale-95
+                                        disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Post Announcement
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
 

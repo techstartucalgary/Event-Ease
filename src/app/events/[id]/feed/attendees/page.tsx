@@ -10,7 +10,8 @@ export default function AttendeesList() {
     const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();
     const params = useParams();
-    const eventId = params.eventId;
+    console.log(params);
+    const eventId = params.id;
 
     const filteredAttendees = MOCK_ATTENDEES.filter((attendee) => {
         return (
@@ -25,7 +26,7 @@ export default function AttendeesList() {
         localStorage.setItem("selectedChatUser", JSON.stringify(attendee));
 
         // Otherwise, navigate directly to the chats page
-        router.push(`/event/${eventId}/chats`);
+        router.push(`/events/${eventId}/feed/chats`);
     };
 
     const handleExportClick = () => {
