@@ -11,8 +11,23 @@ export default async function EventDetail({ params }: Props) {
     const event = await getEventById(id);
 
     if (!event) {
-        return <div>Event not found</div>;
+        return (
+            <div className="max-w-2xl mx-auto text-center py-24 px-6">
+                <h1 className="text-4xl font-bold text-surface mb-4">Event Not Found</h1>
+                <p className="text-lg text-gray-600 mb-6">
+                    Sorry, we couldn&apos;t find the event you&apos;re looking for. It may have been removed or never existed.
+                </p>
+
+                <Link
+                    href="/events"
+                    className="inline-block bg-[#768a96] text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity"
+                >
+                    ← Back to Events
+                </Link>
+            </div>
+        );
     }
+    
 
     console.log("event", event);
 
@@ -60,19 +75,67 @@ export default async function EventDetail({ params }: Props) {
                 {/* Event Details Column */}
                 <div className="flex flex-col gap-8">
                     {/* Title */}
-                    <h1 className="text-3xl font-bold text-surface">
-                        {event.name}
-                    </h1>
+                    <div className="flex flex-col leading-tight">
+                        <h1 className="text-3xl font-bold text-surface mb-0">
+                            {event.name}
+                        </h1>
+                        <p className="text-base text-gray-600">
+                            {(() => {
+                                const start = new Date(event.startDate);
+                                const end = new Date(event.endDate);
+
+                                const isSameDay =
+                                start.getUTCFullYear() === end.getUTCFullYear() &&
+                                start.getUTCMonth() === end.getUTCMonth() &&
+                                start.getUTCDate() === end.getUTCDate();
+
+                                const formatUTCDate = (date: Date) =>
+                                date.toLocaleDateString("en-US", {
+                                    timeZone: "UTC",
+                                    month: "long",
+                                    day: "numeric",
+                                    year: "numeric",
+                                });
+
+                                const formatUTCTime = (date: Date) =>
+                                date.toLocaleTimeString("en-US", {
+                                    timeZone: "UTC",
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                });
+
+                                if (isSameDay) {
+                                return `${formatUTCDate(start)} · ${formatUTCTime(start)} – ${formatUTCTime(end)}`;
+                                } else {
+                                return `${formatUTCDate(start)} · ${formatUTCTime(start)} – ${formatUTCDate(end)} · ${formatUTCTime(end)}`;
+                                }
+                            })()}
+                        </p>
+
+
+
+
+
+                    </div>
+
 
                     {/* Key Details */}
-                    <div className="flex gap-6">
+                    <div className="flex gap-x-16">
                         <div className="flex flex-col gap-1">
                             <p className="text-sm text-gray-500 uppercase tracking-wide">
-                                Time
+                                Start Time
                             </p>
                             <p className="text-surface font-medium">
-                                {event.startDate.toLocaleString()}
+                                {new Date(event.startDate).toLocaleTimeString("en-US", {
+                                    timeZone: "UTC",
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                })}
                             </p>
+
+
                         </div>
                         <div className="flex flex-col gap-1">
                             <p className="text-sm text-gray-500 uppercase tracking-wide">
