@@ -28,12 +28,7 @@ const EventSchema = new Schema<EventSchemaType>(
         creator: {
             type: String,
             required: true,
-            refPath: "creatorType",
-        },
-        creatorType: {
-            type: String,
-            required: true,
-            enum: entityTypes,
+            ref: "Organization",
         },
         location: {
             type: String,
@@ -83,7 +78,6 @@ export function validateNewEventData(params: NewEvent) {
         description,
         images,
         creator,
-        creatorType,
         location,
         startDate,
         endDate,
@@ -96,10 +90,6 @@ export function validateNewEventData(params: NewEvent) {
         }),
         images: yup.array().of(yup.string()).required("Images are required"),
         creator: getStringSchema({ message: "Creator ID is required" }),
-        creatorType: yup
-            .string()
-            .oneOf(entityTypes, "Invalid creator type")
-            .required("Creator type is required"),
         location: getStringSchema({ message: "Location is required" }),
         startDate: yup.date().required("Start date is required"),
         endDate: yup
@@ -129,7 +119,6 @@ export function validateNewEventData(params: NewEvent) {
         description,
         images,
         creator,
-        creatorType,
         location,
         startDate,
         endDate,

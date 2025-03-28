@@ -11,7 +11,6 @@ export type NewEvent = {
     description: string;
     images: string[];
     creator: string;
-    creatorType: EntityType;
     location: string;
     startDate: Date;
     endDate: Date;

@@ -15,6 +15,8 @@ import {
     validateEventUpdates,
 } from "@/lib/server/models/event";
 import { SortOrder, UpdateQuery, FilterQuery } from "mongoose";
+import { PopulatedOrganization } from "@/lib/types/organization";
+import { populatedOrganizationFields } from "./organization";
 
 export async function createEvent(data: NewEvent) {
     try {
@@ -61,7 +63,7 @@ export async function updateEvent(
     }
 }
 
-function sanitizeEventObject<T extends EventSchemaType>(
+function sanitizeEventObject<T extends EventSchemaType | (Omit<EventSchemaType, 'creator'> & { creator: PopulatedOrganization })>(
     event: T
 ): EventSchemaType {
     const status =
@@ -73,10 +75,11 @@ function sanitizeEventObject<T extends EventSchemaType>(
                 : "Ongoing"
             : "Unknown";
 
-    const { images, ...rest } = parseToJSON(event);
+    const { images, creator, ...rest } = parseToJSON(event);
 
     return {
         ...rest,
+        creator: typeof creator === 'string' ? creator : creator._id,
         status,
         images: images.map((image) =>
             prefixWithCloudUrl("Events", `${event._id}/${image}`)
@@ -88,7 +91,10 @@ export async function getEventById(
     eventId: string
 ): Promise<EventSchemaType | null> {
     try {
-        const event = await (await Event).findById(eventId).lean();
+        const event = await (await Event)
+            .findById(eventId)
+            .populate<{ creator: PopulatedOrganization }>("creator", populatedOrganizationFields.join(" "))
+            .lean();
         return event ? sanitizeEventObject(event) : null;
     } catch (error) {
         logError("Error getting event by ID", error);
