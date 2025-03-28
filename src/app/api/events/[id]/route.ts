@@ -5,7 +5,7 @@ import {
   deleteEventById,
 } from "@/lib/server/helpers/event";
 import { RequestParam } from "@/lib/types";
-import { BulkEventDataToUpdate, EventSchemaType } from "@/lib/types/event";
+import { BulkEventDataToUpdate } from "@/lib/types/event";
 import { EventNotFoundError } from "@/lib/helpers/exceptions";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ export async function GET(_: Request, { params }: RequestParam) {
   try {
     const { id } = await params;
 
-    const event: EventSchemaType | null = await getEventById(id);
+    const event = await getEventById(id);
 
     if (!event) throw new EventNotFoundError();
 

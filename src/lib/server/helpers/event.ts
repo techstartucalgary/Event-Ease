@@ -9,6 +9,7 @@ import {
     NewEvent,
     BulkEventDataToUpdate,
     EventSchemaType,
+    PopulatedEvent,
 } from "@/lib/types/event";
 import {
     validateNewEventData,
@@ -63,24 +64,13 @@ export async function updateEvent(
     }
 }
 
-function sanitizeEventObject<T extends EventSchemaType | (Omit<EventSchemaType, 'creator'> & { creator: PopulatedOrganization })>(
-    event: T
-): EventSchemaType {
-    const status =
-        event.startDate && event.endDate
-            ? new Date() < event.startDate
-                ? "Upcoming"
-                : new Date() > event.endDate
-                ? "Completed"
-                : "Ongoing"
-            : "Unknown";
-
-    const { images, creator, ...rest } = parseToJSON(event);
+function sanitizeEventObject(
+    event: EventSchemaType | PopulatedEvent
+) {
+    const { images, ...rest } = parseToJSON(event);
 
     return {
         ...rest,
-        creator: typeof creator === 'string' ? creator : creator._id,
-        status,
         images: images.map((image) =>
             prefixWithCloudUrl("Events", `${event._id}/${image}`)
         ),
@@ -89,13 +79,13 @@ function sanitizeEventObject<T extends EventSchemaType | (Omit<EventSchemaType, 
 
 export async function getEventById(
     eventId: string
-): Promise<EventSchemaType | null> {
+) {
     try {
         const event = await (await Event)
             .findById(eventId)
             .populate<{ creator: PopulatedOrganization }>("creator", populatedOrganizationFields.join(" "))
             .lean();
-        return event ? sanitizeEventObject(event) : null;
+        return event ? sanitizeEventObject(event) as PopulatedEvent : null;
     } catch (error) {
         logError("Error getting event by ID", error);
         return null;
@@ -133,7 +123,7 @@ export async function fetchFilteredEvents({
     limit,
     sortParam = { startDate: "ascending" },
 }: // TODO: add priceRange and categories
-FetchFilteredEventsArgs): Promise<EventSchemaType[]> {
+    FetchFilteredEventsArgs): Promise<PopulatedEvent[]> {
     try {
         const query: FilterQuery<EventSchemaType> = {};
 
@@ -175,32 +165,44 @@ FetchFilteredEventsArgs): Promise<EventSchemaType[]> {
                         },
                     },
                     { $match: query },
+                    {
+                        $lookup: {
+                            from: "Organizations",
+                            localField: "creator",
+                            foreignField: "_id",
+                            as: "creator",
+                            pipeline: [
+                                {
+                                    $project: {
+                                        _id: 1,
+                                        name: 1,
+                                        picture: 1,
+                                        email: 1,
+                                        phoneNumber: 1
+                                    }
+                                },
+                            ],
+                        }
+                    },
+                    { $unwind: "$creator" },
                     { $sort: sort as { [key: string]: 1 | -1 } },
                     { $skip: page * limit },
                     { $limit: limit },
                 ])
-            ).map(sanitizeEventObject);
+            ).map(sanitizeEventObject) as PopulatedEvent[];
         }
-
-        // Commented out for now as we don't have a price field in the events collection
-        // if (priceRange) {
-        //     if (priceRange.max !== undefined) {
-        //         query.price = { $gte: priceRange.min, $lte: priceRange.max };
-        //     } else {
-        //         query.price = { $gte: priceRange.min };
-        //     }
-        // }
 
         const events = await (
             await Event
         )
             .find(query)
+            .populate<{ creator: PopulatedOrganization }>("creator", populatedOrganizationFields.join(" "))
             .sort(sortParam)
             .skip(page * limit)
             .limit(limit)
             .lean();
 
-        return events.map(sanitizeEventObject);
+        return events.map(sanitizeEventObject) as PopulatedEvent[];
     } catch (error) {
         logError("Error fetching filtered events", error);
         processError(error);

@@ -1,4 +1,6 @@
-import { BaseModel, EntityType } from ".";
+import { ObjectId } from "mongodb";
+import { BaseModel } from ".";
+import { PopulatedOrganization } from "./organization";
 
 export type Ticket = {
     type: string;
@@ -27,4 +29,8 @@ export type BulkEventDataToUpdate = {
     tickets?: Ticket[];
 };
 
-export type EventSchemaType = BaseModel & NewEvent;
+export type EventSchemaType = BaseModel & Omit<NewEvent, 'creator'> & {
+    creator: ObjectId
+};
+
+export type PopulatedEvent = Omit<EventSchemaType, 'creator'> & { creator: PopulatedOrganization }

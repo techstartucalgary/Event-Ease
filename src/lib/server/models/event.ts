@@ -4,72 +4,67 @@ import {
     EventSchemaType,
     NewEvent,
 } from "@/lib/types/event";
-import { entityTypes } from "@/lib/helpers";
 import { DATABASE_CONNECTION } from "@/lib/server/helpers/database";
 import * as yup from "yup";
 import { getStringSchema } from "@/lib/helpers";
+import { ObjectId } from "mongodb";
 
-// ** Add participants model **
-
-const EventSchema = new Schema<EventSchemaType>(
-    {
-        name: {
-            type: String,
-            required: true,
-        },
-        description: {
-            type: String,
-            required: true,
-        },
-        images: {
-            type: [String],
-            required: true,
-        },
-        creator: {
-            type: String,
-            required: true,
-            ref: "Organization",
-        },
-        location: {
-            type: String,
-            required: true,
-        },
-        startDate: {
-            type: Date,
-            required: true,
-        },
-        endDate: {
-            type: Date,
-            required: true,
-        },
-        tags: {
-            type: [String],
-            default: [],
-        },
-        tickets: {
-            type: [
-                {
-                    type: {
-                        type: String,
-                        required: true,
-                    },
-                    quantity: {
-                        type: Number,
-                        required: true,
-                        min: 0,
-                    },
-                    price: {
-                        type: Number,
-                        required: true,
-                        min: 0,
-                    },
-                },
-            ],
-            default: [],
-        },
+const EventSchema = new Schema<EventSchemaType>({
+    name: {
+        type: String,
+        required: true,
     },
-    { collection: "Events", timestamps: true, versionKey: false }
-);
+    description: {
+        type: String,
+        required: true,
+    },
+    images: {
+        type: [String],
+        required: true,
+    },
+    creator: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "Organization",
+    },
+    location: {
+        type: String,
+        required: true,
+    },
+    startDate: {
+        type: Date,
+        required: true,
+    },
+    endDate: {
+        type: Date,
+        required: true,
+    },
+    tags: {
+        type: [String],
+        default: [],
+    },
+    tickets: {
+        type: [
+            {
+                type: {
+                    type: String,
+                    required: true,
+                },
+                quantity: {
+                    type: Number,
+                    required: true,
+                    min: 0,
+                },
+                price: {
+                    type: Number,
+                    required: true,
+                    min: 0,
+                },
+            },
+        ],
+        default: [],
+    },
+}, { collection: "Events", timestamps: true, versionKey: false });
 
 export function validateNewEventData(params: NewEvent) {
     // Validate the provided params for creating a new event
@@ -78,6 +73,8 @@ export function validateNewEventData(params: NewEvent) {
         description,
         images,
         creator,
+        tags,
+        tickets,
         location,
         startDate,
         endDate,
@@ -91,6 +88,7 @@ export function validateNewEventData(params: NewEvent) {
         images: yup.array().of(yup.string()).required("Images are required"),
         creator: getStringSchema({ message: "Creator ID is required" }),
         location: getStringSchema({ message: "Location is required" }),
+        tags: yup.array().of(yup.string()).required("Tags are required"),
         startDate: yup.date().required("Start date is required"),
         endDate: yup
             .date()
@@ -118,12 +116,13 @@ export function validateNewEventData(params: NewEvent) {
         name,
         description,
         images,
-        creator,
+        creator: new ObjectId(creator),
+        tags,
+        tickets,
         location,
         startDate,
         endDate,
-        tickets: params.tickets,
-    }) as NewEvent;
+    });
 }
 
 export function validateEventUpdates(data: BulkEventDataToUpdate) {
