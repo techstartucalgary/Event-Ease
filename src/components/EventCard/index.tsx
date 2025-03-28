@@ -11,6 +11,7 @@ export default function EventCard({ image, name, description, tags, link }: {
     tags: string[]; 
     link: string;
 }) {
+    console.log("image", image);
     const router = useRouter(); // For navigating on tag click
 
     return (

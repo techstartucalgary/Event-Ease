@@ -48,7 +48,7 @@ export default function HeroSection() {
                     Get Started
                 </motion.button>
 
-                <Link href="/explore">
+                <Link href="/events">
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
