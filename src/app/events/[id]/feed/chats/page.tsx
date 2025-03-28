@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState, useEffect } from "react";
 import { Chat, Attendee, Message } from "../types";
@@ -288,7 +288,7 @@ export default function Chats() {
     };
 
     return (
-        <div className="h-full overflow-hidden w-full min-h-[calc(100vh-8rem)] max-md:min-h-[calc(100vh-12rem)]">
+        <div className="h-full overflow-hidden w-full">
             {/* Mobile: Show either list or chat */}
             <div className="md:hidden h-full w-full min-h-full">
                 {isMobileListVisible ? (
@@ -316,7 +316,7 @@ export default function Chats() {
 
             {/* Desktop: Show both side by side */}
             <div className="hidden md:flex h-full gap-6">
-                <div className="w-full md:w-[320px] lg:w-[380px] flex-none overflow-hidden">
+                <div className="w-full md:w-[320px] lg:w-[380px] flex-none overflow-hidden h-full">
                     <div className="h-full overflow-y-auto">
                         <ChatList
                             chats={chats}

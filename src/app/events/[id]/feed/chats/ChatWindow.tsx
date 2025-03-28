@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Chat } from "../types";
 import Image from "next/image";
 
@@ -16,6 +16,7 @@ export default function ChatWindow({
     onBack,
 }: ChatWindowProps) {
     const [newMessage, setNewMessage] = useState("");
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const otherParticipant =
         chat.participants.find((p) => p.id !== currentUserId) ||
@@ -30,7 +31,7 @@ export default function ChatWindow({
     };
 
     return (
-        <div className="h-full flex flex-col w-full md:h-auto md:w-auto">
+        <div className="flex flex-col h-full w-full md:w-auto max-md:h-[calc(100vh-7rem)]">
             {/* Header */}
             <div className="flex-none p-4 border-b border-gray-200 flex items-center gap-3 bg-gray-50">
                 <button
@@ -67,8 +68,8 @@ export default function ChatWindow({
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 flex flex-col">
-                <div className="flex-1 overflow-y-auto space-y-4">
+            <div className="flex-1 overflow-y-auto p-4">
+                <div className="space-y-4">
                     {chat.messages.map((message) => (
                         <div
                             key={message.id}
@@ -100,6 +101,7 @@ export default function ChatWindow({
                             </div>
                         </div>
                     ))}
+                    <div ref={messagesEndRef} />
                 </div>
             </div>
 

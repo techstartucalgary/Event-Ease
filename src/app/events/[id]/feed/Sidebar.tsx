@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 interface SidebarProps {
     isMobileMenuOpen: boolean;
@@ -13,10 +14,15 @@ export default function Sidebar({
     onMobileMenuClose,
 }: SidebarProps) {
     const pathname = usePathname();
+    const { id: eventId } = useParams();
 
-    const activeTab = pathname.split("/").pop();
-    
-    const { eventId } = useParams();
+    // Improved active tab detection
+    let activeTab = pathname.split("/").pop();
+
+    // If we're on the main feed page (/events/{id}/feed), set activeTab to "news"
+    if (pathname === `/events/${eventId}/feed`) {
+        activeTab = "news";
+    }
 
     // Define navigation items
     const navItems = [
@@ -24,108 +30,92 @@ export default function Sidebar({
             id: "news",
             label: "News Feed",
             icon: "newspaper",
-            path: `/event/${eventId}`,
+            path: `/events/${eventId}/feed`,
         },
         {
             id: "itinerary",
             label: "Itinerary",
             icon: "calendar-alt",
-            path: `/event/${eventId}/itinerary`,
+            path: `/events/${eventId}/feed/itinerary`,
         },
         {
             id: "chats",
             label: "Chats",
             icon: "comments",
-            path: `/event/${eventId}/chats`,
+            path: `/events/${eventId}/feed/chats`,
         },
         {
             id: "notifications",
             label: "Notifications",
             icon: "bell",
-            path: `/event/${eventId}/notifications`,
+            path: `/events/${eventId}/feed/notifications`,
         },
         {
             id: "attendees",
             label: "Attendees",
             icon: "users",
-            path: `/event/${eventId}/attendees`,
+            path: `/events/${eventId}/feed/attendees`,
         },
         {
             id: "info",
             label: "Event Info",
             icon: "info-circle",
-            path: `/event/${eventId}/info`,
+            path: `/events/${eventId}/feed/info`,
         },
         {
             id: "register",
             label: "Register",
             icon: "user-plus",
-            path: `/event/${eventId}/register`,
+            path: `/events/${eventId}/feed/register`,
         },
     ];
 
     return (
-        <>
-            {/* Desktop Sidebar */}
-            <aside className="hidden lg:block w-64 bg-white text-surface rounded-lg overflow-hidden shadow-lg h-full">
-                <div className="p-4">
-                    <h2 className="text-xl font-bold mb-6">Event Dashboard</h2>
-                    <nav>
-                        <ul className="space-y-2">
-                            {navItems.map((item) => (
-                                <li key={item.id}>
-                                    <Link
-                                        href={item.path}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                                            activeTab === item.id
-                                                ? "bg-accent/20 text-tertiary"
-                                                : "hover:bg-accent/10"
-                                        }`}
-                                    >
-                                        <i
-                                            className={`fas fa-${item.icon} w-5`}
-                                        ></i>
-                                        <span>{item.label}</span>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
-                </div>
-            </aside>
-
-            {/* Mobile Sidebar */}
-            <div
-                className={`fixed inset-y-0 left-0 z-40 w-64 bg-surface text-accent shadow-2xl transform transition-transform duration-300 ease-in-out lg:hidden ${
-                    isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-                }`}
-            >
-                <div className="p-4">
-                    <h2 className="text-xl font-bold mb-6">Event Dashboard</h2>
-                    <nav>
-                        <ul className="space-y-2">
-                            {navItems.map((item) => (
-                                <li key={item.id}>
-                                    <Link
-                                        href={item.path}
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                                            activeTab === item.id
-                                                ? "bg-accent/20 text-white"
-                                                : "hover:bg-accent/10"
-                                        }`}
-                                        onClick={onMobileMenuClose}
-                                    >
-                                        <i
-                                            className={`fas fa-${item.icon} w-5`}
-                                        ></i>
-                                        <span>{item.label}</span>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
-                </div>
+        <div
+            className={`
+                fixed lg:sticky left-0 h-[calc(100vh-4rem)] w-64 
+                bg-white shadow-md overflow-y-auto lg:overflow-visible
+                transition-transform duration-300 z-40
+                ${
+                    isMobileMenuOpen
+                        ? "translate-x-0"
+                        : "-translate-x-full lg:translate-x-0"
+                }
+                flex-shrink-0
+            `}
+        >
+            <div className="p-4 lg:sticky lg:top-0 bg-white">
+                <motion.h2
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-xl font-bold mb-6 text-gray-900"
+                >
+                    Event Dashboard
+                </motion.h2>
+                <nav className="space-y-1">
+                    {navItems.map((item, index) => (
+                        <motion.div
+                            key={item.id}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                        >
+                            <Link
+                                href={item.path}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                                    activeTab === item.id
+                                        ? "bg-gray-50 text-foreground font-medium border-l-4 border-tertiary"
+                                        : "hover:bg-gray-50 text-foreground"
+                                }`}
+                                onClick={onMobileMenuClose}
+                            >
+                                <i className={`fas fa-${item.icon} w-5`}></i>
+                                <span>{item.label}</span>
+                            </Link>
+                        </motion.div>
+                    ))}
+                </nav>
             </div>
-        </>
+        </div>
     );
 }

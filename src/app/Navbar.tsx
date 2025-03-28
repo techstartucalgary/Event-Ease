@@ -1,7 +1,13 @@
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { SignedOut, SignedIn, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import {
+    SignedOut,
+    SignedIn,
+    SignInButton,
+    SignUpButton,
+    UserButton,
+} from "@clerk/nextjs";
 
 async function RightSide() {
     return (
@@ -21,11 +27,11 @@ async function RightSide() {
                 </div>
             </SignedOut>
             <SignedIn>
-                <UserButton 
+                <UserButton
                     appearance={{
                         elements: {
-                            userButtonBox: "h-8 w-8"
-                        }
+                            userButtonBox: "h-8 w-8",
+                        },
                     }}
                 />
             </SignedIn>
@@ -35,7 +41,7 @@ async function RightSide() {
 
 export default function Navbar() {
     return (
-        <nav className="sticky top-0 z-50 w-full shadow-sm bg-surface text-accent">
+        <nav className="sticky top-0 z-50 w-full shadow-sm bg-surface text-accent h-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                     <Link
