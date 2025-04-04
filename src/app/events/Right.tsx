@@ -4,7 +4,6 @@ import { useState } from "react";
 import EventCard from "@/components/EventCard"; // Ensure the path is correct
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { searchEventsAction } from "@/lib/server/actions/event";
-import { EventSchemaType } from "@/lib/types/event";
 import { useFilters } from "@/contexts/FilterContext";
 
 const LIMIT = 6; // Number of events per page
@@ -42,7 +41,7 @@ export default function ExploreEvents() {
     });
 
     // Flatten the pages array to get all events
-    const events: EventSchemaType[] = data?.pages.flat() || [];
+    const events = data?.pages.flat() || [];
 
     return (
         <div className="max-w-[90%] mx-auto py-6 px-4 md:px-8 lg:px-16">

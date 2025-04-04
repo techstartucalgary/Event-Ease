@@ -8,6 +8,8 @@ import { Organization } from "@/lib/server/models";
 import { validatedNewOrganizationData, validateOrganizationUpdates } from "@/lib/server/models/organization";
 import { SortOrder, UpdateQuery } from "mongoose";
 
+export const populatedOrganizationFields = ["_id", "name", "email", "picture", "phoneNumber"] as const;
+
 export async function createOrganization(data: NewOrganization) {
     try {
         const organization = await (await Organization)

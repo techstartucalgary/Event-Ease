@@ -31,8 +31,6 @@ export default async function EventDetail({ params }: Props) {
         );
     }
 
-    console.log("event", event);
-
     // Hardcoded event data for now
     /* const event = {
         id,
@@ -193,18 +191,18 @@ export default async function EventDetail({ params }: Props) {
                 <div className="flex items-center gap-3">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden">
                         <Image
-                            src={event.images[0]}
-                            alt={event.creator}
+                            src={event.creator.picture}
+                            alt={event.creator.name}
                             fill
                             className="object-cover"
                         />
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-surface font-medium">
-                            {event.creator}
+                            {event.creator.name}
                         </span>
                         <span className="text-gray-500 text-sm">
-                            {event.creatorType}
+                            {event.creator.email}
                         </span>
                     </div>
                 </div>

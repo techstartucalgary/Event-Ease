@@ -1,8 +1,11 @@
+import { populatedOrganizationFields } from "@/lib/server/helpers/organization";
 import { BaseModel } from ".";
 
 type DefaultFields = {
     pushTokens: string[]
 }
+
+export type PopulatedOrganization = Record<typeof populatedOrganizationFields[number], string>
 
 export type NewOrganization = {
     _id: string,
