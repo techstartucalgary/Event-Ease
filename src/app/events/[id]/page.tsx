@@ -63,8 +63,12 @@ export default async function EventDetail({ params }: Props) {
                 <div className="relative w-full h-fit">
                     <div className="relative aspect-[3/2] w-full">
                         <Image
-                            src={event.images[0]}
-                            alt={event.name}
+                            src={
+                                event.images && event.images.length > 0
+                                    ? event.images[0]
+                                    : "/images/placeholder.jpg"
+                            }
+                            alt={event.name || "Event image"}
                             fill
                             className="object-cover rounded-lg"
                             priority
@@ -191,18 +195,21 @@ export default async function EventDetail({ params }: Props) {
                 <div className="flex items-center gap-3">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden">
                         <Image
-                            src={event.creator.picture}
-                            alt={event.creator.name}
+                            src={
+                                event.creator?.picture ||
+                                "/images/avatar-placeholder.jpg"
+                            }
+                            alt={event.creator?.name || "Event creator"}
                             fill
                             className="object-cover"
                         />
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-surface font-medium">
-                            {event.creator.name}
+                            {event.creator?.name || "Anonymous"}
                         </span>
                         <span className="text-gray-500 text-sm">
-                            {event.creator.email}
+                            {event.creator?.email || ""}
                         </span>
                     </div>
                 </div>

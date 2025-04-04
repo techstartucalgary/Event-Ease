@@ -86,7 +86,7 @@ export default function Explore() {
                                     stiffness: 300,
                                 }}
                             >
-                                <div className="bg-tertiary w-full py-2 px-4 flex justify-between items-center sticky top-0 z-10">
+                                <div className="bg-tertiary w-full pt-2 px-4 flex justify-between items-center sticky top-0 z-10">
                                     <button
                                         onClick={() => setShowFilters(false)}
                                         className="p-2 text-accent hover:text-accent/80 transition-colors"
@@ -94,11 +94,8 @@ export default function Explore() {
                                     >
                                         <i className="fas fa-times text-lg"></i>
                                     </button>
-                                    <div className="w-16 h-1 bg-accent/30 rounded-full" />
-                                    <div className="w-8"></div>{" "}
-                                    {/* Spacer for balance */}
                                 </div>
-                                <div className="p-4">
+                                <div>
                                     <Left />
                                 </div>
                             </motion.div>
