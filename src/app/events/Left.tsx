@@ -94,7 +94,7 @@ export default function Left() {
     };
 
     return (
-        <div className="w-full md:w-72 bg-tertiary md:h-screen p-6 text-accent shadow-xl">
+        <div className="w-full md:w-72 bg-tertiary md:h-screen p-6 text-accent md:shadow-xl">
             <motion.h2
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}

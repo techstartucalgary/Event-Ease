@@ -27,10 +27,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${outfit.variable} antialiased`}>
+            <body
+                className={`${outfit.variable} antialiased flex flex-col min-h-screen`}
+            >
                 <GlobalProvider>
                     <Navbar />
-                    {children}
+                    <main className="flex-grow">{children}</main>
                     <Footer />
                 </GlobalProvider>
             </body>

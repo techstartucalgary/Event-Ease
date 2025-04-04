@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getEventById } from "@/lib/server/helpers/event";
+import { motion } from "framer-motion";
 
 type Props = {
-    params: Promise<{ id: string }>
-}
+    params: Promise<{ id: string }>;
+};
 export default async function EventDetail({ params }: Props) {
     const { id } = await params;
 
@@ -13,9 +14,12 @@ export default async function EventDetail({ params }: Props) {
     if (!event) {
         return (
             <div className="max-w-2xl mx-auto text-center py-24 px-6">
-                <h1 className="text-4xl font-bold text-surface mb-4">Event Not Found</h1>
+                <h1 className="text-4xl font-bold text-surface mb-4">
+                    Event Not Found
+                </h1>
                 <p className="text-lg text-gray-600 mb-6">
-                    Sorry, we couldn&apos;t find the event you&apos;re looking for. It may have been removed or never existed.
+                    Sorry, we couldn&apos;t find the event you&apos;re looking
+                    for. It may have been removed or never existed.
                 </p>
 
                 <Link
@@ -27,7 +31,6 @@ export default async function EventDetail({ params }: Props) {
             </div>
         );
     }
-    
 
     console.log("event", event);
 
@@ -85,40 +88,45 @@ export default async function EventDetail({ params }: Props) {
                                 const end = new Date(event.endDate);
 
                                 const isSameDay =
-                                start.getUTCFullYear() === end.getUTCFullYear() &&
-                                start.getUTCMonth() === end.getUTCMonth() &&
-                                start.getUTCDate() === end.getUTCDate();
+                                    start.getUTCFullYear() ===
+                                        end.getUTCFullYear() &&
+                                    start.getUTCMonth() === end.getUTCMonth() &&
+                                    start.getUTCDate() === end.getUTCDate();
 
                                 const formatUTCDate = (date: Date) =>
-                                date.toLocaleDateString("en-US", {
-                                    timeZone: "UTC",
-                                    month: "long",
-                                    day: "numeric",
-                                    year: "numeric",
-                                });
+                                    date.toLocaleDateString("en-US", {
+                                        timeZone: "UTC",
+                                        month: "long",
+                                        day: "numeric",
+                                        year: "numeric",
+                                    });
 
                                 const formatUTCTime = (date: Date) =>
-                                date.toLocaleTimeString("en-US", {
-                                    timeZone: "UTC",
-                                    hour: "numeric",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                });
+                                    date.toLocaleTimeString("en-US", {
+                                        timeZone: "UTC",
+                                        hour: "numeric",
+                                        minute: "2-digit",
+                                        hour12: true,
+                                    });
 
                                 if (isSameDay) {
-                                return `${formatUTCDate(start)} · ${formatUTCTime(start)} – ${formatUTCTime(end)}`;
+                                    return `${formatUTCDate(
+                                        start
+                                    )} · ${formatUTCTime(
+                                        start
+                                    )} – ${formatUTCTime(end)}`;
                                 } else {
-                                return `${formatUTCDate(start)} · ${formatUTCTime(start)} – ${formatUTCDate(end)} · ${formatUTCTime(end)}`;
+                                    return `${formatUTCDate(
+                                        start
+                                    )} · ${formatUTCTime(
+                                        start
+                                    )} – ${formatUTCDate(
+                                        end
+                                    )} · ${formatUTCTime(end)}`;
                                 }
                             })()}
                         </p>
-
-
-
-
-
                     </div>
-
 
                     {/* Key Details */}
                     <div className="flex gap-x-16">
@@ -127,15 +135,16 @@ export default async function EventDetail({ params }: Props) {
                                 Start Time
                             </p>
                             <p className="text-surface font-medium">
-                                {new Date(event.startDate).toLocaleTimeString("en-US", {
-                                    timeZone: "UTC",
-                                    hour: "numeric",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                })}
+                                {new Date(event.startDate).toLocaleTimeString(
+                                    "en-US",
+                                    {
+                                        timeZone: "UTC",
+                                        hour: "numeric",
+                                        minute: "2-digit",
+                                        hour12: true,
+                                    }
+                                )}
                             </p>
-
-
                         </div>
                         <div className="flex flex-col gap-1">
                             <p className="text-sm text-gray-500 uppercase tracking-wide">
@@ -167,9 +176,15 @@ export default async function EventDetail({ params }: Props) {
                     </div>
 
                     {/* Register Button */}
-                    <button className="w-full sm:w-auto px-8 bg-[#768a96] text-white font-medium py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    <Link
+                        href={`/events/${id}/register`}
+                        className="inline-block px-8 py-3 bg-gradient-to-r from-[#1a2727] to-[#2d4040] text-white rounded-lg 
+                            font-semibold text-center transition-all duration-300 hover:opacity-95
+                            border border-white/10 shadow-md hover:shadow-xl hover:translate-y-[-2px]
+                             w-full"
+                    >
                         Register Now
-                    </button>
+                    </Link>
                 </div>
             </div>
 
