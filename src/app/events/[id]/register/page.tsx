@@ -1,16 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Link from "next/link";
 import { nameRegex } from "@/lib/helpers";
-import useAppContext from "@/hooks/useAppContext";
-
-// Console log the submitted data
 
 // Define the form schema
 const registrationSchema = yup.object({
@@ -34,8 +31,6 @@ type RegistrationFormValues = yup.InferType<typeof registrationSchema>;
 
 export default function RegisterPage() {
     const { id: eventId } = useParams();
-    const router = useRouter();
-    const { refreshPage } = useAppContext();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
@@ -164,7 +159,7 @@ export default function RegisterPage() {
                             <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-20 -mb-20"></div>
 
                             <h1 className="text-3xl font-bold relative z-10">
-                                You're All Set!
+                                You&apos;re All Set!
                             </h1>
                             <p className="opacity-90 relative z-10 mt-2">
                                 Your registration has been confirmed
@@ -202,13 +197,14 @@ export default function RegisterPage() {
                             >
                                 <p className="text-gray-600 mb-8">
                                     Thank you for registering for this event.
-                                    We've sent a confirmation email with all the
-                                    details. We're excited to see you there!
+                                    We&apos;ve sent a confirmation email with
+                                    all the details. We&apos;re excited to see
+                                    you there!
                                 </p>
 
                                 <div className="bg-gray-50 p-6 rounded-lg mb-8 text-left">
                                     <h3 className="font-medium text-gray-700 mb-3">
-                                        What's Next?
+                                        What&apos;s Next?
                                     </h3>
                                     <ul className="space-y-3">
                                         <li className="flex items-start">

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getEventById } from "@/lib/server/helpers/event";
-import { motion } from "framer-motion";
 
 type Props = {
     params: Promise<{ id: string }>;
