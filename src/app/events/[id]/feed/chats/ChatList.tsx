@@ -21,7 +21,7 @@ export default function ChatList({
     };
 
     return (
-        <div className="w-full bg-gray-50">
+        <div className="w-full bg-gray-50 h-full max-md:h-[calc(100vh-7rem)]">
             <div className="p-4 border-b border-gray-200 overflow-hidden">
                 <h2 className="font-semibold text-gray-900 truncate">
                     Messages

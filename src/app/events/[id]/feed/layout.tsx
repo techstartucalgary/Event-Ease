@@ -4,16 +4,16 @@ import { ReactNode, useState } from "react";
 import Sidebar from "./Sidebar";
 
 interface LayoutProps {
-    children: ReactNode
+    children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
-        <div className="min-h-[calc(100vh-4rem)] bg-background w-full">
-            <div className="lg:p-4 h-full">
-                <div className="px-16 max-lg:px-12 max-md:px-0 mx-auto flex h-full">
+        <div className="bg-background w-full h-full min-h-[calc(100vh-4rem)]">
+            <div className="">
+                <div className="mx-auto flex">
                     {/* Sidebar (handles both mobile and desktop) */}
                     <Sidebar
                         isMobileMenuOpen={isMobileMenuOpen}
@@ -35,7 +35,7 @@ export default function Layout({ children }: LayoutProps) {
                     </button>
 
                     {/* Main Content */}
-                    <main className="flex-1 px-4 lg:px-6 pt-2 max-md:pt-6">
+                    <main className="flex-1 px-4 lg:p-6 pt-2 max-md:pt-6">
                         {children}
                     </main>
                 </div>
