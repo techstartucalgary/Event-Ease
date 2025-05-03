@@ -8,6 +8,7 @@ import {
     SignUpButton,
     UserButton,
 } from "@clerk/nextjs";
+import { Bot } from "lucide-react";
 
 async function RightSide() {
     return (
@@ -56,6 +57,19 @@ export default function Navbar() {
                         />
                         EventEase
                     </Link>
+                    
+                    {/* AI Chat link - shown differently on mobile vs desktop */}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
+                        <Link 
+                            href="/aichat" 
+                            className="md:px-4 md:py-2 p-2 bg-tertiary/60 md:bg-transparent rounded-full md:rounded-none text-white hover:bg-tertiary md:hover:bg-transparent md:hover:text-accent/80 transition-colors flex items-center gap-1"
+                            aria-label="AI Event Finder"
+                        >
+                            <Bot size={20} className="md:size-4" />
+                            <span className="hidden md:inline">Ease AI</span>
+                        </Link>
+                    </div>
+                    
                     <Suspense
                         fallback={
                             <div className="flex items-center gap-4">
