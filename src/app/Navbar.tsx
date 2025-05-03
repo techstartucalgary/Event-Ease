@@ -8,6 +8,7 @@ import {
     SignUpButton,
     UserButton,
 } from "@clerk/nextjs";
+import { Bot } from "lucide-react";
 
 async function RightSide() {
     return (
@@ -15,7 +16,7 @@ async function RightSide() {
             <SignedOut>
                 <div className="flex items-center gap-4">
                     <SignInButton mode="modal">
-                        <button className="relative px-4 py-2 text-sm font-medium text-accent after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full">
+                        <button className="relative px-4 py-2 text-sm font-medium text-white after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full">
                             Login
                         </button>
                     </SignInButton>
@@ -46,7 +47,7 @@ export default function Navbar() {
                 <div className="flex h-16 items-center justify-between">
                     <Link
                         href="/"
-                        className="text-accent font-medium transition-colors cursor-pointer select-none flex items-center gap-2"
+                        className="text-white font-medium transition-colors cursor-pointer select-none flex items-center gap-2"
                     >
                         <Image
                             src="/logo.svg"
@@ -56,6 +57,19 @@ export default function Navbar() {
                         />
                         EventEase
                     </Link>
+                    
+                    {/* AI Chat link - shown differently on mobile vs desktop */}
+                    <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
+                        <Link 
+                            href="/aichat" 
+                            className="md:px-4 md:py-2 p-2 bg-tertiary/60 md:bg-transparent rounded-full md:rounded-none text-white hover:bg-tertiary md:hover:bg-transparent md:hover:text-accent/80 transition-colors flex items-center gap-1"
+                            aria-label="AI Event Finder"
+                        >
+                            <Bot size={20} className="md:size-4" />
+                            <span className="hidden md:inline">Ease AI</span>
+                        </Link>
+                    </div>
+                    
                     <Suspense
                         fallback={
                             <div className="flex items-center gap-4">

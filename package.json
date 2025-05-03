@@ -9,11 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.3.21",
+    "@ai-sdk/react": "^1.2.11",
     "@clerk/nextjs": "^6.9.6",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@hookform/resolvers": "^3.9.1",
+    "@radix-ui/react-label": "^2.1.4",
+    "@radix-ui/react-slot": "^1.2.0",
     "@tanstack/react-query": "^5.65.1",
+    "ai": "^4.3.13",
     "bootstrap-icons": "^1.11.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.507.0",
     "moment": "^2.30.1",
     "mongodb": "^6.11.0",
     "mongoose": "^8.9.5",
@@ -22,7 +30,11 @@
     "react-big-calendar": "^1.18.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
-    "yup": "^1.6.1"
+    "react-markdown": "^10.1.0",
+    "tailwind-merge": "^3.2.0",
+    "tailwindcss-animate": "^1.0.7",
+    "yup": "^1.6.1",
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@types/node": "^20",
