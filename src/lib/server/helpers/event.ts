@@ -67,10 +67,14 @@ export async function updateEvent(
 function sanitizeEventObject(
     event: EventSchemaType | PopulatedEvent
 ) {
-    const { images, ...rest } = parseToJSON(event);
+    const { images, creator, ...rest } = parseToJSON(event);
 
     return {
         ...rest,
+        creator: {
+            ...creator,
+            picture: prefixWithCloudUrl("Organizations", `${creator._id}/${(creator as PopulatedOrganization).picture}`),
+        },
         images: images.map((image) =>
             prefixWithCloudUrl("Events", `${event._id}/${image}`)
         ),
