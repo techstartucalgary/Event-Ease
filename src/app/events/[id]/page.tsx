@@ -80,9 +80,11 @@ export default async function EventDetail({ params }: Props) {
                 <div className="flex flex-col gap-8">
                     {/* Title */}
                     <div className="flex flex-col leading-tight">
-                        <h1 className="text-3xl font-bold text-surface mb-0">
-                            {event.name}
-                        </h1>
+                        <Link href={`/events/${id}/feed`}>
+                            <h1 className="text-3xl font-bold text-surface mb-0">
+                                {event.name}
+                            </h1>
+                        </Link>
                         <p className="text-base text-gray-600">
                             {(() => {
                                 const start = new Date(event.startDate);
