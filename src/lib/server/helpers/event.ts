@@ -145,6 +145,7 @@ export async function fetchFilteredEvents({
             const sort = sortParam
                 ? { [theKey]: sortParam[theKey] === "ascending" ? 1 : -1 }
                 : { startDate: 1 };
+
             return (
                 await (
                     await Event
@@ -165,13 +166,14 @@ export async function fetchFilteredEvents({
                         },
                     },
                     { $match: query },
+                    { $addFields: { creatorId: { $toObjectId: "$creator" } } },
                     {
                         $lookup: {
                             from: "Organizations",
-                            localField: "creator",
-                            foreignField: "_id",
-                            as: "creator",
+                            let: { creatorId: "$creatorId" },
+                            
                             pipeline: [
+                                { $match: { $expr: { $eq: ["$_id", "$$creatorId"] } } },
                                 {
                                     $project: {
                                         _id: 1,
@@ -182,9 +184,9 @@ export async function fetchFilteredEvents({
                                     }
                                 },
                             ],
+                            as: "creator",
                         }
                     },
-                    { $unwind: "$creator" },
                     { $sort: sort as { [key: string]: 1 | -1 } },
                     { $skip: page * limit },
                     { $limit: limit },
