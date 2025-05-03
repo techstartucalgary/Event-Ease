@@ -81,6 +81,20 @@ function sanitizeEventObject(
     };
 }
 
+export async function getAllEvents() {
+    try {
+        const events = await (await Event)
+            .find()
+            .populate<{ creator: PopulatedOrganization }>("creator", populatedOrganizationFields.join(" "))
+            .lean();
+        return events.map(sanitizeEventObject) as PopulatedEvent[];
+    } catch (error) {
+        logError("Error getting all events", error);
+        processError(error);
+        return [];
+    }
+}
+
 export async function getEventById(
     eventId: string
 ) {
@@ -175,7 +189,7 @@ export async function fetchFilteredEvents({
                         $lookup: {
                             from: "Organizations",
                             let: { creatorId: "$creatorId" },
-                            
+
                             pipeline: [
                                 { $match: { $expr: { $eq: ["$_id", "$$creatorId"] } } },
                                 {

@@ -15,7 +15,7 @@ async function RightSide() {
             <SignedOut>
                 <div className="flex items-center gap-4">
                     <SignInButton mode="modal">
-                        <button className="relative px-4 py-2 text-sm font-medium text-accent after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full">
+                        <button className="relative px-4 py-2 text-sm font-medium text-white after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full">
                             Login
                         </button>
                     </SignInButton>
@@ -46,7 +46,7 @@ export default function Navbar() {
                 <div className="flex h-16 items-center justify-between">
                     <Link
                         href="/"
-                        className="text-accent font-medium transition-colors cursor-pointer select-none flex items-center gap-2"
+                        className="text-white font-medium transition-colors cursor-pointer select-none flex items-center gap-2"
                     >
                         <Image
                             src="/logo.svg"
