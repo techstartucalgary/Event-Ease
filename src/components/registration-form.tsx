@@ -8,13 +8,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { CheckCircle } from "lucide-react"
+import { PopulatedEvent } from "@/lib/types/event"
 
 interface RegistrationFormProps {
-  event: {
-    id: number
-    title: string
-  }
-  onComplete: (formData: any) => void
+  event: PopulatedEvent
+  onComplete: (formData: unknown) => void
   onCancel: () => void
 }
 
@@ -56,7 +54,7 @@ export default function RegistrationForm({ event, onComplete, onCancel }: Regist
         <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
         <h3 className="text-xl font-semibold text-center">Registration Complete!</h3>
         <p className="text-center text-gray-600 mt-2">
-          You're all set for {event.title}. Check your email for confirmation details.
+          {`You're all set for ${event.name}. Check your email for confirmation details.`}
         </p>
       </div>
     )

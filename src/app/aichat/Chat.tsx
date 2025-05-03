@@ -25,16 +25,11 @@ export default function ChatPage({ events }: { events: PopulatedEvent[] }) {
 
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const [showRegistrationForm, setShowRegistrationForm] = useState(false)
-    const [selectedEvent, setSelectedEvent] = useState<any>(null)
+    const [selectedEvent] = useState<PopulatedEvent | null>(null)
     const [typingEffect, setTypingEffect] = useState(false)
     const [messageSent, setMessageSent] = useState(false)
 
-    const handleRegisterClick = (event: any) => {
-        setSelectedEvent(event)
-        setShowRegistrationForm(true)
-    }
-
-    const handleRegistrationComplete = (formData: any) => {
+    const handleRegistrationComplete = (formData: unknown) => {
         setShowRegistrationForm(false)
         // In a real app, you would submit this data to your backend
         console.log("Registration data:", formData, "for event:", selectedEvent)
@@ -133,7 +128,7 @@ export default function ChatPage({ events }: { events: PopulatedEvent[] }) {
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-[calc(100vh-8rem)]">
                     <div className="flex-1 overflow-y-auto p-4 md:p-6 hide-scrollbar">
                         <AnimatePresence>
-                            {messages.map((message, index) => (
+                            {messages.map((message) => (
                                 <motion.div
                                     key={message.id}
                                     className={`mb-5 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
